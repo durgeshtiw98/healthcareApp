@@ -911,6 +911,335 @@ export default function ClinicianDashboard() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Episode View Dialog */}
+      <Dialog open={!!viewEpisodeDialog} onOpenChange={() => setViewEpisodeDialog(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <Eye className="w-5 h-5 mr-2" />
+              Episode Details - {viewEpisodeDialog?.patientName}
+            </DialogTitle>
+            <DialogDescription>
+              {viewEpisodeDialog?.id} • {viewEpisodeDialog?.diagnosis}
+            </DialogDescription>
+          </DialogHeader>
+
+          {viewEpisodeDialog && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Episode Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Patient</Label>
+                      <p className="text-gray-900">{viewEpisodeDialog.patientName}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Diagnosis</Label>
+                      <p className="text-gray-900">{viewEpisodeDialog.diagnosis}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Status</Label>
+                      <Badge className={`${viewEpisodeDialog.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                        {viewEpisodeDialog.status}
+                      </Badge>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Priority</Label>
+                      <div className="flex items-center space-x-2">
+                        <div className={`w-3 h-3 rounded-full ${getPriorityColor(viewEpisodeDialog.priority)}`} />
+                        <span className="capitalize">{viewEpisodeDialog.priority}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Timeline & Activity</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Last Update</Label>
+                      <p className="text-gray-900">{viewEpisodeDialog.lastUpdate}</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Days Active</Label>
+                      <p className="text-gray-900">{viewEpisodeDialog.daysActive} days</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium text-gray-600">Next Action</Label>
+                      <p className="text-gray-900">{viewEpisodeDialog.nextAction}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Recent Notes</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {[
+                      { date: "2024-01-15 09:30", author: "Dr. Sarah Johnson", note: "Patient showing improvement in cardiac function. Echo results normal." },
+                      { date: "2024-01-14 14:20", author: "Nurse Kelly", note: "Vital signs stable. Patient ambulating well." },
+                      { date: "2024-01-13 11:15", author: "Dr. Sarah Johnson", note: "Post-operative check completed. Incision healing well." }
+                    ].map((note, index) => (
+                      <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="font-medium text-gray-900">{note.author}</span>
+                          <span className="text-sm text-gray-500">{note.date}</span>
+                        </div>
+                        <p className="text-gray-700 text-sm">{note.note}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => setViewEpisodeDialog(null)}>
+                  Close
+                </Button>
+                <Button
+                  onClick={() => {
+                    setEditingEpisode(viewEpisodeDialog);
+                    setEditEpisodeDialog(viewEpisodeDialog);
+                    setViewEpisodeDialog(null);
+                  }}
+                >
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Episode
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Episode Edit Dialog */}
+      <Dialog open={!!editEpisodeDialog} onOpenChange={() => setEditEpisodeDialog(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <Edit className="w-5 h-5 mr-2" />
+              Edit Episode - {editEpisodeDialog?.patientName}
+            </DialogTitle>
+            <DialogDescription>
+              Update episode information and status
+            </DialogDescription>
+          </DialogHeader>
+
+          {editEpisodeDialog && (
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              setIsSubmitting(true);
+              // Simulate saving
+              setTimeout(() => {
+                setIsSubmitting(false);
+                setEditEpisodeDialog(null);
+              }, 1000);
+            }}>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-status">Episode Status</Label>
+                    <Select
+                      value={editingEpisode.status || editEpisodeDialog.status}
+                      onValueChange={(value) => setEditingEpisode(prev => ({ ...prev, status: value as any }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="completed">Completed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-priority">Priority Level</Label>
+                    <Select
+                      value={editingEpisode.priority || editEpisodeDialog.priority}
+                      onValueChange={(value) => setEditingEpisode(prev => ({ ...prev, priority: value as any }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="low">Low</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="high">High</SelectItem>
+                        <SelectItem value="critical">Critical</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="edit-diagnosis">Diagnosis</Label>
+                  <Input
+                    id="edit-diagnosis"
+                    value={editingEpisode.diagnosis || editEpisodeDialog.diagnosis}
+                    onChange={(e) => setEditingEpisode(prev => ({ ...prev, diagnosis: e.target.value }))}
+                    placeholder="Update diagnosis..."
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="edit-next-action">Next Action</Label>
+                  <Textarea
+                    id="edit-next-action"
+                    value={editingEpisode.nextAction || editEpisodeDialog.nextAction}
+                    onChange={(e) => setEditingEpisode(prev => ({ ...prev, nextAction: e.target.value }))}
+                    placeholder="Update next action..."
+                    rows={3}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="edit-update-note">Update Note</Label>
+                  <Textarea
+                    id="edit-update-note"
+                    placeholder="Add a note about this update..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-2 mt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setEditEpisodeDialog(null)}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : "Save Changes"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Episode Notes Dialog */}
+      <Dialog open={!!noteEpisodeDialog} onOpenChange={() => setNoteEpisodeDialog(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <MessageSquare className="w-5 h-5 mr-2" />
+              Add Note - {noteEpisodeDialog?.patientName}
+            </DialogTitle>
+            <DialogDescription>
+              Add a clinical note to the episode record
+            </DialogDescription>
+          </DialogHeader>
+
+          {noteEpisodeDialog && (
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              setIsSubmitting(true);
+              // Simulate saving note
+              setTimeout(() => {
+                setIsSubmitting(false);
+                setNoteEpisodeDialog(null);
+                setNewNote("");
+              }, 1000);
+            }}>
+              <div className="space-y-4">
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="flex items-start space-x-3">
+                    <FileText className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <div>
+                      <h4 className="font-medium text-blue-900">Episode: {noteEpisodeDialog.diagnosis}</h4>
+                      <p className="text-sm text-blue-700">Status: {noteEpisodeDialog.status} • Priority: {noteEpisodeDialog.priority}</p>
+                      <p className="text-sm text-blue-700">Last update: {noteEpisodeDialog.lastUpdate}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="note-type">Note Type</Label>
+                  <Select defaultValue="clinical">
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="clinical">Clinical Note</SelectItem>
+                      <SelectItem value="progress">Progress Note</SelectItem>
+                      <SelectItem value="assessment">Assessment</SelectItem>
+                      <SelectItem value="plan">Treatment Plan</SelectItem>
+                      <SelectItem value="discharge">Discharge Note</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="note-content">Clinical Note</Label>
+                  <Textarea
+                    id="note-content"
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    placeholder="Enter your clinical note here..."
+                    rows={6}
+                    required
+                  />
+                  <p className="text-sm text-gray-500">
+                    This note will be part of the permanent medical record and subject to audit.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="note-date">Date & Time</Label>
+                    <Input
+                      id="note-date"
+                      type="datetime-local"
+                      defaultValue={new Date().toISOString().slice(0, 16)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="note-urgency">Urgency</Label>
+                    <Select defaultValue="routine">
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="routine">Routine</SelectItem>
+                        <SelectItem value="urgent">Urgent</SelectItem>
+                        <SelectItem value="critical">Critical</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-2 mt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setNoteEpisodeDialog(null)}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isSubmitting || !newNote.trim()}>
+                  {isSubmitting ? "Saving Note..." : "Save Note"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }
