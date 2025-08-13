@@ -951,6 +951,819 @@ export default function PatientDashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Comprehensive Episode Details Dialog */}
+      <Dialog open={!!episodeDetailsDialog} onOpenChange={() => setEpisodeDetailsDialog(null)}>
+        <DialogContent className="max-w-7xl max-h-[95vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center text-2xl">
+              <FileText className="w-6 h-6 mr-3 text-health-primary" />
+              {episodeDetailsDialog?.title}
+            </DialogTitle>
+            <DialogDescription className="text-lg">
+              {episodeDetailsDialog?.diagnosis} • Episode {episodeDetailsDialog?.id} • Started {episodeDetailsDialog?.startDate}
+            </DialogDescription>
+          </DialogHeader>
+
+          {episodeDetailsDialog && (
+            <Tabs defaultValue="overview" className="mt-6">
+              <TabsList className="grid w-full grid-cols-8">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="visits">Visits</TabsTrigger>
+                <TabsTrigger value="medications">Medications</TabsTrigger>
+                <TabsTrigger value="labs">Labs</TabsTrigger>
+                <TabsTrigger value="reports">Reports</TabsTrigger>
+                <TabsTrigger value="dietary">Dietary</TabsTrigger>
+                <TabsTrigger value="consents">Consents</TabsTrigger>
+                <TabsTrigger value="analysis">Analysis</TabsTrigger>
+              </TabsList>
+
+              {/* Overview Tab */}
+              <TabsContent value="overview" className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <User className="w-5 h-5 mr-2" />
+                        Episode Information
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Diagnosis</label>
+                        <p className="text-gray-900">{episodeDetailsDialog.diagnosis}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Status</label>
+                        <Badge className={`${episodeDetailsDialog.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                          {episodeDetailsDialog.status}
+                        </Badge>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Severity</label>
+                        <div className="flex items-center space-x-2">
+                          <div className={`w-3 h-3 rounded-full ${
+                            episodeDetailsDialog.severity === 'critical' ? 'bg-red-500' :
+                            episodeDetailsDialog.severity === 'high' ? 'bg-orange-500' :
+                            episodeDetailsDialog.severity === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                          }`} />
+                          <span className="capitalize">{episodeDetailsDialog.severity}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Duration</label>
+                        <p className="text-gray-900">
+                          {episodeDetailsDialog.startDate} - {episodeDetailsDialog.endDate || 'Ongoing'}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <Stethoscope className="w-5 h-5 mr-2" />
+                        Care Team
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Primary Provider</label>
+                        <p className="text-gray-900">{episodeDetailsDialog.provider}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Facility</label>
+                        <p className="text-gray-900">{episodeDetailsDialog.facility}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Specialty</label>
+                        <p className="text-gray-900">Endocrinology</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Care Coordinator</label>
+                        <p className="text-gray-900">Nurse Kelly Williams</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <Activity className="w-5 h-5 mr-2" />
+                        Episode Metrics
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="grid grid-cols-2 gap-2 text-center">
+                        <div className="p-2 bg-blue-50 rounded">
+                          <div className="text-lg font-semibold text-blue-900">12</div>
+                          <div className="text-xs text-blue-600">Visits</div>
+                        </div>
+                        <div className="p-2 bg-green-50 rounded">
+                          <div className="text-lg font-semibold text-green-900">{episodeDetailsDialog.artifacts}</div>
+                          <div className="text-xs text-green-600">Artifacts</div>
+                        </div>
+                        <div className="p-2 bg-purple-50 rounded">
+                          <div className="text-lg font-semibold text-purple-900">8</div>
+                          <div className="text-xs text-purple-600">Lab Tests</div>
+                        </div>
+                        <div className="p-2 bg-orange-50 rounded">
+                          <div className="text-lg font-semibold text-orange-900">5</div>
+                          <div className="text-xs text-orange-600">Medications</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Recent Activity Timeline</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {[
+                        { date: "2024-01-15 14:30", event: "HbA1c Lab Results", description: "HbA1c: 6.9% (Improved from 7.2%)", type: "lab", icon: TestTube },
+                        { date: "2024-01-14 09:00", event: "Medication Adjustment", description: "Metformin increased to 1000mg twice daily", type: "medication", icon: Pill },
+                        { date: "2024-01-12 11:15", event: "Routine Follow-up Visit", description: "Blood glucose levels reviewed, patient education provided", type: "visit", icon: Stethoscope },
+                        { date: "2024-01-10 16:45", event: "Dietary Consultation", description: "Nutrition plan updated, carb counting reviewed", type: "dietary", icon: Heart }
+                      ].map((activity, index) => {
+                        const IconComponent = activity.icon;
+                        return (
+                          <div key={index} className="flex items-start space-x-4">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                              activity.type === 'lab' ? 'bg-blue-100' :
+                              activity.type === 'medication' ? 'bg-purple-100' :
+                              activity.type === 'visit' ? 'bg-green-100' : 'bg-orange-100'
+                            }`}>
+                              <IconComponent className={`w-5 h-5 ${
+                                activity.type === 'lab' ? 'text-blue-600' :
+                                activity.type === 'medication' ? 'text-purple-600' :
+                                activity.type === 'visit' ? 'text-green-600' : 'text-orange-600'
+                              }`} />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between">
+                                <h4 className="font-medium text-gray-900">{activity.event}</h4>
+                                <span className="text-sm text-gray-500">{activity.date}</span>
+                              </div>
+                              <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Visits Tab */}
+              <TabsContent value="visits" className="space-y-6">
+                <div className="grid gap-4">
+                  {[
+                    {
+                      date: "2024-01-15",
+                      time: "14:30",
+                      type: "Follow-up",
+                      provider: "Dr. Sarah Johnson",
+                      location: "Metro Health Center - Room 203",
+                      duration: "45 min",
+                      status: "Completed",
+                      notes: "Patient reports improved energy levels. Blood glucose logs reviewed. Medication compliance excellent.",
+                      vitals: { bp: "128/82", hr: "72", weight: "165 lbs", temp: "98.6°F" }
+                    },
+                    {
+                      date: "2024-01-08",
+                      time: "10:00",
+                      type: "Consultation",
+                      provider: "Dr. Sarah Johnson",
+                      location: "Metro Health Center - Room 203",
+                      duration: "30 min",
+                      status: "Completed",
+                      notes: "Quarterly review. HbA1c results discussed. Patient education on carbohydrate counting provided.",
+                      vitals: { bp: "132/85", hr: "68", weight: "167 lbs", temp: "98.4°F" }
+                    },
+                    {
+                      date: "2024-01-22",
+                      time: "09:30",
+                      type: "Follow-up",
+                      provider: "Dr. Sarah Johnson",
+                      location: "Metro Health Center - Room 203",
+                      duration: "30 min",
+                      status: "Scheduled",
+                      notes: "Upcoming visit to review medication effectiveness and discuss exercise plan.",
+                      vitals: null
+                    }
+                  ].map((visit, index) => (
+                    <Card key={index} className={visit.status === 'Scheduled' ? 'border-blue-200 bg-blue-50' : ''}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <h3 className="font-semibold text-gray-900">{visit.type} Visit</h3>
+                            <p className="text-sm text-gray-600">{visit.date} at {visit.time}</p>
+                          </div>
+                          <Badge className={visit.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}>
+                            {visit.status}
+                          </Badge>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                          <div>
+                            <label className="text-xs font-medium text-gray-600">Provider</label>
+                            <p className="text-sm text-gray-900">{visit.provider}</p>
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium text-gray-600">Location</label>
+                            <p className="text-sm text-gray-900">{visit.location}</p>
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium text-gray-600">Duration</label>
+                            <p className="text-sm text-gray-900">{visit.duration}</p>
+                          </div>
+                        </div>
+                        {visit.vitals && (
+                          <div className="grid grid-cols-4 gap-2 mb-3 p-2 bg-gray-50 rounded">
+                            <div className="text-center">
+                              <div className="text-xs text-gray-600">BP</div>
+                              <div className="font-medium">{visit.vitals.bp}</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-xs text-gray-600">HR</div>
+                              <div className="font-medium">{visit.vitals.hr}</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-xs text-gray-600">Weight</div>
+                              <div className="font-medium">{visit.vitals.weight}</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-xs text-gray-600">Temp</div>
+                              <div className="font-medium">{visit.vitals.temp}</div>
+                            </div>
+                          </div>
+                        )}
+                        <p className="text-sm text-gray-700">{visit.notes}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* Medications Tab */}
+              <TabsContent value="medications" className="space-y-6">
+                <div className="grid gap-4">
+                  {[
+                    {
+                      name: "Metformin",
+                      strength: "1000mg",
+                      dosage: "Twice daily with meals",
+                      prescribed: "2024-01-14",
+                      prescriber: "Dr. Sarah Johnson",
+                      status: "Active",
+                      instructions: "Take with breakfast and dinner. Monitor for gastrointestinal side effects.",
+                      sideEffects: ["Nausea", "Diarrhea", "Metallic taste"],
+                      lastFilled: "2024-01-14",
+                      nextRefill: "2024-02-14",
+                      pharmacy: "Metro Pharmacy"
+                    },
+                    {
+                      name: "Lisinopril",
+                      strength: "10mg",
+                      dosage: "Once daily",
+                      prescribed: "2024-01-08",
+                      prescriber: "Dr. Sarah Johnson",
+                      status: "Active",
+                      instructions: "Take at the same time each day. Monitor blood pressure.",
+                      sideEffects: ["Dry cough", "Dizziness", "Hyperkalemia"],
+                      lastFilled: "2024-01-08",
+                      nextRefill: "2024-02-08",
+                      pharmacy: "Metro Pharmacy"
+                    },
+                    {
+                      name: "Atorvastatin",
+                      strength: "20mg",
+                      dosage: "Once daily at bedtime",
+                      prescribed: "2023-12-15",
+                      prescriber: "Dr. Sarah Johnson",
+                      status: "Discontinued",
+                      instructions: "Discontinued due to muscle pain. Monitor cholesterol levels.",
+                      sideEffects: ["Muscle pain", "Elevated liver enzymes"],
+                      lastFilled: "2023-12-15",
+                      nextRefill: "N/A",
+                      pharmacy: "Metro Pharmacy"
+                    }
+                  ].map((med, index) => (
+                    <Card key={index} className={med.status === 'Discontinued' ? 'opacity-75' : ''}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <h3 className="font-semibold text-gray-900">{med.name} {med.strength}</h3>
+                            <p className="text-sm text-gray-600">{med.dosage}</p>
+                          </div>
+                          <Badge className={med.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
+                            {med.status}
+                          </Badge>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                          <div>
+                            <label className="text-xs font-medium text-gray-600">Prescribed By</label>
+                            <p className="text-sm text-gray-900">{med.prescriber}</p>
+                            <p className="text-xs text-gray-500">{med.prescribed}</p>
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium text-gray-600">Pharmacy</label>
+                            <p className="text-sm text-gray-900">{med.pharmacy}</p>
+                            <p className="text-xs text-gray-500">Last filled: {med.lastFilled}</p>
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium text-gray-600">Next Refill</label>
+                            <p className="text-sm text-gray-900">{med.nextRefill}</p>
+                          </div>
+                        </div>
+                        <div className="mb-3">
+                          <label className="text-xs font-medium text-gray-600">Instructions</label>
+                          <p className="text-sm text-gray-700">{med.instructions}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-medium text-gray-600">Potential Side Effects</label>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {med.sideEffects.map((effect, i) => (
+                              <Badge key={i} variant="secondary" className="text-xs">
+                                {effect}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* Labs Tab */}
+              <TabsContent value="labs" className="space-y-6">
+                <div className="grid gap-4">
+                  {[
+                    {
+                      date: "2024-01-15",
+                      orderingProvider: "Dr. Sarah Johnson",
+                      lab: "Metro Lab Services",
+                      status: "Completed",
+                      results: [
+                        { test: "HbA1c", value: "6.9%", range: "< 7.0%", status: "Normal", trend: "Improved" },
+                        { test: "Fasting Glucose", value: "128 mg/dL", range: "70-100 mg/dL", status: "High", trend: "Stable" },
+                        { test: "Creatinine", value: "1.0 mg/dL", range: "0.7-1.3 mg/dL", status: "Normal", trend: "Stable" },
+                        { test: "eGFR", value: "85 mL/min/1.73m²", range: "> 60", status: "Normal", trend: "Stable" }
+                      ]
+                    },
+                    {
+                      date: "2024-01-08",
+                      orderingProvider: "Dr. Sarah Johnson",
+                      lab: "Metro Lab Services",
+                      status: "Completed",
+                      results: [
+                        { test: "Lipid Panel", value: "Total: 195 mg/dL", range: "< 200 mg/dL", status: "Normal", trend: "Stable" },
+                        { test: "LDL Cholesterol", value: "118 mg/dL", range: "< 100 mg/dL", status: "High", trend: "Improved" },
+                        { test: "HDL Cholesterol", value: "45 mg/dL", range: "> 40 mg/dL", status: "Normal", trend: "Stable" },
+                        { test: "Triglycerides", value: "160 mg/dL", range: "< 150 mg/dL", status: "High", trend: "Stable" }
+                      ]
+                    },
+                    {
+                      date: "2024-01-22",
+                      orderingProvider: "Dr. Sarah Johnson",
+                      lab: "Metro Lab Services",
+                      status: "Scheduled",
+                      results: [
+                        { test: "Comprehensive Metabolic Panel", value: "Pending", range: "Various", status: "Pending", trend: "-" },
+                        { test: "Thyroid Function", value: "Pending", range: "Various", status: "Pending", trend: "-" }
+                      ]
+                    }
+                  ].map((labOrder, index) => (
+                    <Card key={index} className={labOrder.status === 'Scheduled' ? 'border-blue-200 bg-blue-50' : ''}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h3 className="font-semibold text-gray-900">Lab Order - {labOrder.date}</h3>
+                            <p className="text-sm text-gray-600">Ordered by {labOrder.orderingProvider}</p>
+                            <p className="text-sm text-gray-600">{labOrder.lab}</p>
+                          </div>
+                          <Badge className={labOrder.status === 'Completed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}>
+                            {labOrder.status}
+                          </Badge>
+                        </div>
+                        <div className="space-y-2">
+                          {labOrder.results.map((result, i) => (
+                            <div key={i} className="grid grid-cols-5 gap-2 p-2 bg-gray-50 rounded text-sm">
+                              <div className="font-medium">{result.test}</div>
+                              <div className="text-center">{result.value}</div>
+                              <div className="text-center text-gray-600">{result.range}</div>
+                              <div className="text-center">
+                                <Badge className={
+                                  result.status === 'Normal' ? 'bg-green-100 text-green-800' :
+                                  result.status === 'High' ? 'bg-red-100 text-red-800' :
+                                  result.status === 'Low' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }>
+                                  {result.status}
+                                </Badge>
+                              </div>
+                              <div className="text-center">
+                                {result.trend === 'Improved' && <TrendingUp className="w-4 h-4 text-green-600 mx-auto" />}
+                                {result.trend === 'Stable' && <div className="w-4 h-4 bg-gray-400 rounded-full mx-auto" />}
+                                {result.trend === 'Worsened' && <div className="w-4 h-4 bg-red-400 rounded-full mx-auto" />}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* Reports Tab */}
+              <TabsContent value="reports" className="space-y-6">
+                <div className="grid gap-4">
+                  {[
+                    {
+                      title: "Quarterly Diabetes Management Report",
+                      date: "2024-01-15",
+                      type: "Clinical Summary",
+                      provider: "Dr. Sarah Johnson",
+                      summary: "Comprehensive review of diabetes management over Q4 2023. Patient shows significant improvement in glucose control.",
+                      attachments: ["Quarterly_Report_Q4_2023.pdf", "Lab_Trends_Analysis.pdf"]
+                    },
+                    {
+                      title: "Retinal Screening Report",
+                      date: "2024-01-10",
+                      type: "Specialist Report",
+                      provider: "Dr. Amanda Chen, Ophthalmologist",
+                      summary: "Annual diabetic retinal screening completed. No signs of diabetic retinopathy detected.",
+                      attachments: ["Retinal_Screening_2024.pdf", "Fundus_Photos.pdf"]
+                    },
+                    {
+                      title: "Nutrition Assessment",
+                      date: "2024-01-05",
+                      type: "Dietary Report",
+                      provider: "Sarah Martinez, RD",
+                      summary: "Nutritional assessment and meal planning review. Patient demonstrates good understanding of carbohydrate counting.",
+                      attachments: ["Nutrition_Assessment.pdf", "Meal_Plan_Update.pdf"]
+                    }
+                  ].map((report, index) => (
+                    <Card key={index}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <h3 className="font-semibold text-gray-900">{report.title}</h3>
+                            <p className="text-sm text-gray-600">{report.provider}</p>
+                            <p className="text-sm text-gray-600">{report.date}</p>
+                          </div>
+                          <Badge variant="outline">{report.type}</Badge>
+                        </div>
+                        <p className="text-sm text-gray-700 mb-3">{report.summary}</p>
+                        {report.attachments && (
+                          <div>
+                            <label className="text-xs font-medium text-gray-600 mb-2 block">Attachments</label>
+                            <div className="space-y-1">
+                              {report.attachments.map((attachment, i) => (
+                                <div key={i} className="flex items-center text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
+                                  <FileText className="w-4 h-4 mr-2" />
+                                  {attachment}
+                                  <ExternalLink className="w-3 h-3 ml-auto" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* Dietary Tab */}
+              <TabsContent value="dietary" className="space-y-6">
+                <div className="grid gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <Heart className="w-5 h-5 mr-2 text-red-500" />
+                        Current Dietary Plan
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div className="text-center p-3 bg-green-50 rounded">
+                          <div className="text-2xl font-bold text-green-900">1800</div>
+                          <div className="text-sm text-green-600">Daily Calories</div>
+                        </div>
+                        <div className="text-center p-3 bg-blue-50 rounded">
+                          <div className="text-2xl font-bold text-blue-900">45g</div>
+                          <div className="text-sm text-blue-600">Carbs per Meal</div>
+                        </div>
+                        <div className="text-center p-3 bg-purple-50 rounded">
+                          <div className="text-2xl font-bold text-purple-900">25g</div>
+                          <div className="text-sm text-purple-600">Daily Fiber</div>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-sm font-medium text-gray-600">Meal Timing</label>
+                          <p className="text-sm text-gray-700">Breakfast: 7:00 AM | Lunch: 12:00 PM | Dinner: 6:00 PM | Snacks: 3:00 PM, 9:00 PM</p>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-600">Key Recommendations</label>
+                          <ul className="text-sm text-gray-700 list-disc list-inside space-y-1">
+                            <li>Focus on complex carbohydrates and high-fiber foods</li>
+                            <li>Include lean protein with each meal</li>
+                            <li>Limit simple sugars and processed foods</li>
+                            <li>Monitor portion sizes using plate method</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Dietary Restrictions & Allergies</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium text-gray-600 mb-2 block">Food Allergies</label>
+                          <div className="space-y-2">
+                            <Badge variant="destructive" className="mr-2">Tree Nuts</Badge>
+                            <Badge variant="destructive">Shellfish</Badge>
+                          </div>
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium text-gray-600 mb-2 block">Dietary Restrictions</label>
+                          <div className="space-y-2">
+                            <Badge variant="secondary" className="mr-2">Low Sodium</Badge>
+                            <Badge variant="secondary">Diabetic Diet</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Recent Nutrition Consultations</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {[
+                          {
+                            date: "2024-01-10",
+                            nutritionist: "Sarah Martinez, RD",
+                            topic: "Carbohydrate Counting Review",
+                            notes: "Patient demonstrates improved understanding of carb counting. Discussed meal planning strategies.",
+                            recommendations: ["Continue current meal timing", "Increase vegetable portions", "Try new whole grain options"]
+                          },
+                          {
+                            date: "2023-12-15",
+                            nutritionist: "Sarah Martinez, RD",
+                            topic: "Holiday Meal Planning",
+                            notes: "Discussed strategies for managing blood sugar during holiday celebrations.",
+                            recommendations: ["Focus on portion control", "Bring diabetes-friendly options to gatherings", "Plan extra glucose monitoring"]
+                          }
+                        ].map((consultation, index) => (
+                          <div key={index} className="border rounded-lg p-4">
+                            <div className="flex items-start justify-between mb-2">
+                              <div>
+                                <h4 className="font-medium text-gray-900">{consultation.topic}</h4>
+                                <p className="text-sm text-gray-600">{consultation.nutritionist}</p>
+                              </div>
+                              <span className="text-sm text-gray-500">{consultation.date}</span>
+                            </div>
+                            <p className="text-sm text-gray-700 mb-2">{consultation.notes}</p>
+                            <div>
+                              <label className="text-xs font-medium text-gray-600">Recommendations:</label>
+                              {consultation.recommendations.map((rec, i) => (
+                                <p key={i} className="text-sm text-gray-700">• {rec}</p>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+
+              {/* Consents Tab */}
+              <TabsContent value="consents" className="space-y-6">
+                <div className="grid gap-4">
+                  {[
+                    {
+                      id: "EC-001",
+                      type: "Episode-Specific Consent",
+                      grantedTo: "Dr. Sarah Johnson",
+                      purpose: "Primary diabetes management and care coordination",
+                      permissions: ["Full Episode Access", "Treatment Planning", "Medication Management", "Lab Ordering"],
+                      expires: "2024-12-31",
+                      status: "Active",
+                      grantedDate: "2024-01-15"
+                    },
+                    {
+                      id: "EC-002",
+                      type: "Specialist Referral",
+                      grantedTo: "Dr. Amanda Chen, Ophthalmologist",
+                      purpose: "Diabetic retinopathy screening and monitoring",
+                      permissions: ["View Lab Results", "Access Medical History", "Generate Reports"],
+                      expires: "2024-06-30",
+                      status: "Active",
+                      grantedDate: "2024-01-01"
+                    },
+                    {
+                      id: "EC-003",
+                      type: "Pharmacy Access",
+                      grantedTo: "Metro Pharmacy",
+                      purpose: "Prescription fulfillment and medication counseling",
+                      permissions: ["View Prescriptions", "Medication History", "Allergy Information"],
+                      expires: "2024-12-31",
+                      status: "Active",
+                      grantedDate: "2024-01-15"
+                    }
+                  ].map((consent, index) => (
+                    <Card key={index}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <h3 className="font-semibold text-gray-900">{consent.type}</h3>
+                            <p className="text-sm text-gray-600">Granted to {consent.grantedTo}</p>
+                            <p className="text-xs text-gray-500">Granted: {consent.grantedDate}</p>
+                          </div>
+                          <Badge className="bg-green-100 text-green-800">{consent.status}</Badge>
+                        </div>
+                        <p className="text-sm text-gray-700 mb-3">{consent.purpose}</p>
+                        <div className="mb-3">
+                          <label className="text-xs font-medium text-gray-600 mb-1 block">Permissions</label>
+                          <div className="flex flex-wrap gap-1">
+                            {consent.permissions.map((permission, i) => (
+                              <Badge key={i} variant="secondary" className="text-xs">
+                                {permission}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600">Expires: {consent.expires}</span>
+                          <span className="text-gray-600">ID: {consent.id}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* Analysis Tab */}
+              <TabsContent value="analysis" className="space-y-6">
+                <div className="grid gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <TrendingUp className="w-5 h-5 mr-2 text-health-primary" />
+                        Episode Progress Analysis
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div className="text-center p-3 bg-green-50 rounded">
+                          <div className="text-2xl font-bold text-green-900">87%</div>
+                          <div className="text-sm text-green-600">Treatment Adherence</div>
+                        </div>
+                        <div className="text-center p-3 bg-blue-50 rounded">
+                          <div className="text-2xl font-bold text-blue-900">15%</div>
+                          <div className="text-sm text-blue-600">HbA1c Improvement</div>
+                        </div>
+                        <div className="text-center p-3 bg-purple-50 rounded">
+                          <div className="text-2xl font-bold text-purple-900">6.9%</div>
+                          <div className="text-sm text-purple-600">Current HbA1c</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>AI-Powered Health Insights</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
+                          <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+                          <div>
+                            <p className="font-medium text-green-900">Excellent Progress</p>
+                            <p className="text-sm text-green-700">
+                              Your HbA1c has improved by 15% since episode start. Continue current treatment plan.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                          <TestTube className="w-5 h-5 text-blue-600 mt-0.5" />
+                          <div>
+                            <p className="font-medium text-blue-900">Upcoming Recommendations</p>
+                            <p className="text-sm text-blue-700">
+                              Consider scheduling lipid panel in 3 months to monitor cardiovascular risk factors.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+                          <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+                          <div>
+                            <p className="font-medium text-yellow-900">Attention Needed</p>
+                            <p className="text-sm text-yellow-700">
+                              Fasting glucose levels occasionally above target. Consider adjusting meal timing or medication.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Risk Assessment</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <div>
+                              <p className="font-medium text-green-900">Cardiovascular Risk</p>
+                              <p className="text-sm text-green-700">Low (8%)</p>
+                            </div>
+                          </div>
+                          <CheckCircle className="w-5 h-5 text-green-600" />
+                        </div>
+
+                        <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            <div>
+                              <p className="font-medium text-yellow-900">Diabetic Complications</p>
+                              <p className="text-sm text-yellow-700">Moderate (25%)</p>
+                            </div>
+                          </div>
+                          <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                        </div>
+
+                        <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <div>
+                              <p className="font-medium text-blue-900">Medication Interactions</p>
+                              <p className="text-sm text-blue-700">None detected</p>
+                            </div>
+                          </div>
+                          <CheckCircle className="w-5 h-5 text-blue-600" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Treatment Recommendations</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                          <div className="w-2 h-2 bg-health-primary rounded-full mt-2"></div>
+                          <div>
+                            <p className="font-medium text-gray-900">Continue Current Medication Regimen</p>
+                            <p className="text-sm text-gray-600">Current diabetes medications are effective. Maintain current dosing.</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                          <div className="w-2 h-2 bg-health-primary rounded-full mt-2"></div>
+                          <div>
+                            <p className="font-medium text-gray-900">Increase Physical Activity</p>
+                            <p className="text-sm text-gray-600">Add 15 minutes of walking daily to improve glucose control and cardiovascular health.</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                          <div className="w-2 h-2 bg-health-primary rounded-full mt-2"></div>
+                          <div>
+                            <p className="font-medium text-gray-900">Regular Monitoring</p>
+                            <p className="text-sm text-gray-600">Continue quarterly HbA1c testing and annual comprehensive eye exams.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+            </Tabs>
+          )}
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }
