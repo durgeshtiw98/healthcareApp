@@ -94,6 +94,12 @@ export default function ClinicianDashboard() {
   const [editingEpisode, setEditingEpisode] = useState<Partial<Episode>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Alert dialog states
+  const [viewAlertDialog, setViewAlertDialog] = useState<Alert | null>(null);
+  const [acknowledgeAlertDialog, setAcknowledgeAlertDialog] = useState<Alert | null>(null);
+  const [acknowledgeReason, setAcknowledgeReason] = useState("");
+  const [acknowledgeAction, setAcknowledgeAction] = useState("");
+
   const patients: Patient[] = [
     {
       id: "P-001",
