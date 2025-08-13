@@ -301,88 +301,106 @@ export default function ClinicianDashboard() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          <Card>
+          {/* Patients Card */}
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Patients</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-blue-700">Patients</p>
+                  <p className="text-2xl font-bold text-blue-900">
                     {todayStats.totalPatients}
                   </p>
                 </div>
-                <Users className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          {/* Episodes Card */}
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Episodes</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-green-700">Episodes</p>
+                  <p className="text-2xl font-bold text-green-900">
                     {todayStats.activeEpisodes}
                   </p>
                 </div>
-                <FileText className="w-6 h-6 text-green-600" />
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          {/* Critical Card */}
+          <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200 hover:shadow-lg transition-shadow">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Critical</p>
-                  <p className="text-2xl font-bold text-red-600">
+                  <p className="text-sm font-medium text-red-700">Critical</p>
+                  <p className="text-2xl font-bold text-red-900">
                     {todayStats.criticalAlerts}
                   </p>
                 </div>
-                <AlertTriangle className="w-6 h-6 text-red-600" />
+                <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+                  <AlertTriangle className="w-6 h-6 text-white" />
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          {/* Actions Card */}
+          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:shadow-lg transition-shadow">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Actions</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-orange-700">Actions</p>
+                  <p className="text-2xl font-bold text-orange-900">
                     {todayStats.pendingActions}
                   </p>
                 </div>
-                <Clock className="w-6 h-6 text-orange-600" />
+                <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-white" />
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          {/* Visits Card */}
+          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-shadow">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Visits</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-purple-700">Visits</p>
+                  <p className="text-2xl font-bold text-purple-900">
                     {todayStats.scheduledVisits}
                   </p>
                 </div>
-                <Calendar className="w-6 h-6 text-purple-600" />
+                <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+                  <Calendar className="w-6 h-6 text-white" />
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          {/* Lab Results Card */}
+          <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200 hover:shadow-lg transition-shadow">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">
+                  <p className="text-sm font-medium text-teal-700">
                     Lab Results
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-teal-900">
                     {todayStats.labResults}
                   </p>
                 </div>
-                <TestTube className="w-6 h-6 text-medical-600" />
+                <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center">
+                  <TestTube className="w-6 h-6 text-white" />
+                </div>
               </div>
             </CardContent>
           </Card>
