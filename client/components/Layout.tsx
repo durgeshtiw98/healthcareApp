@@ -1,16 +1,16 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Activity, 
-  Heart, 
-  User, 
-  Stethoscope, 
-  FileText, 
-  Shield, 
+import {
+  Activity,
+  Heart,
+  User,
+  Stethoscope,
+  FileText,
+  Shield,
   Bell,
   Menu,
-  X
+  X,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -21,7 +21,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+
   const navigation = [
     { name: "Home", href: "/", icon: Heart },
     { name: "Patient Portal", href: "/patient", icon: User },
@@ -82,12 +82,15 @@ export default function Layout({ children }: LayoutProps) {
                   3
                 </Badge>
               </Button>
-              
+
               <div className="hidden md:flex items-center space-x-2">
                 <Button variant="outline" size="sm">
                   Sign In
                 </Button>
-                <Button size="sm" className="bg-health-primary hover:bg-health-primary/90">
+                <Button
+                  size="sm"
+                  className="bg-health-primary hover:bg-health-primary/90"
+                >
                   Get Started
                 </Button>
               </div>
@@ -99,7 +102,11 @@ export default function Layout({ children }: LayoutProps) {
                 className="md:hidden"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
               </Button>
             </div>
           </div>
@@ -132,7 +139,10 @@ export default function Layout({ children }: LayoutProps) {
                 <Button variant="outline" size="sm" className="w-full">
                   Sign In
                 </Button>
-                <Button size="sm" className="w-full bg-health-primary hover:bg-health-primary/90">
+                <Button
+                  size="sm"
+                  className="w-full bg-health-primary hover:bg-health-primary/90"
+                >
                   Get Started
                 </Button>
               </div>
@@ -142,9 +152,7 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
 
       {/* Footer */}
       <footer className="bg-white border-t border-medical-200">
@@ -155,11 +163,14 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="w-8 h-8 bg-gradient-to-br from-health-primary to-health-secondary rounded-lg flex items-center justify-center">
                   <Activity className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-lg font-bold text-gray-900">HealthChain</span>
+                <span className="text-lg font-bold text-gray-900">
+                  HealthChain
+                </span>
               </div>
               <p className="text-gray-600 mb-4">
-                Episode-centric healthcare platform with patient-controlled access, 
-                FHIR compliance, and blockchain-secured consent management.
+                Episode-centric healthcare platform with patient-controlled
+                access, FHIR compliance, and blockchain-secured consent
+                management.
               </p>
               <div className="flex space-x-4 text-sm text-gray-500">
                 <span>HIPAA Compliant</span>
@@ -167,41 +178,84 @@ export default function Layout({ children }: LayoutProps) {
                 <span>Blockchain Secured</span>
               </div>
             </div>
-            
+
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">For Patients</h3>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><Link to="/patient" className="hover:text-health-primary">My Episodes</Link></li>
-                <li><Link to="/consents" className="hover:text-health-primary">Manage Consents</Link></li>
-                <li><Link to="/patient" className="hover:text-health-primary">Health Records</Link></li>
-                <li><Link to="/patient" className="hover:text-health-primary">Share Data</Link></li>
+                <li>
+                  <Link to="/patient" className="hover:text-health-primary">
+                    My Episodes
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/consents" className="hover:text-health-primary">
+                    Manage Consents
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/patient" className="hover:text-health-primary">
+                    Health Records
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/patient" className="hover:text-health-primary">
+                    Share Data
+                  </Link>
+                </li>
               </ul>
             </div>
-            
+
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">For Clinicians</h3>
+              <h3 className="font-semibold text-gray-900 mb-4">
+                For Clinicians
+              </h3>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><Link to="/clinician" className="hover:text-health-primary">Patient Dashboard</Link></li>
-                <li><Link to="/clinician" className="hover:text-health-primary">ICU Monitoring</Link></li>
-                <li><Link to="/clinician" className="hover:text-health-primary">E-Prescribe</Link></li>
-                <li><Link to="/clinician" className="hover:text-health-primary">Lab Orders</Link></li>
+                <li>
+                  <Link to="/clinician" className="hover:text-health-primary">
+                    Patient Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/clinician" className="hover:text-health-primary">
+                    ICU Monitoring
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/clinician" className="hover:text-health-primary">
+                    E-Prescribe
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/clinician" className="hover:text-health-primary">
+                    Lab Orders
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
-          
+
           <div className="mt-8 pt-8 border-t border-medical-200">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-sm text-gray-500">
                 © 2024 HealthChain. All rights reserved.
               </p>
               <div className="flex space-x-6 mt-4 md:mt-0">
-                <Link to="/privacy" className="text-sm text-gray-500 hover:text-health-primary">
+                <Link
+                  to="/privacy"
+                  className="text-sm text-gray-500 hover:text-health-primary"
+                >
                   Privacy Policy
                 </Link>
-                <Link to="/terms" className="text-sm text-gray-500 hover:text-health-primary">
+                <Link
+                  to="/terms"
+                  className="text-sm text-gray-500 hover:text-health-primary"
+                >
                   Terms of Service
                 </Link>
-                <Link to="/security" className="text-sm text-gray-500 hover:text-health-primary">
+                <Link
+                  to="/security"
+                  className="text-sm text-gray-500 hover:text-health-primary"
+                >
                   Security
                 </Link>
               </div>

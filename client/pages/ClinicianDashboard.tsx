@@ -1,7 +1,13 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,7 +40,7 @@ import {
   Download,
   Upload,
   Filter,
-  MoreHorizontal
+  MoreHorizontal,
 } from "lucide-react";
 
 interface Patient {
@@ -85,7 +91,7 @@ export default function ClinicianDashboard() {
       activeEpisodes: 2,
       lastVisit: "2024-01-15",
       riskScore: 85,
-      status: "critical"
+      status: "critical",
     },
     {
       id: "P-002",
@@ -96,7 +102,7 @@ export default function ClinicianDashboard() {
       activeEpisodes: 1,
       lastVisit: "2024-01-14",
       riskScore: 45,
-      status: "stable"
+      status: "stable",
     },
     {
       id: "P-003",
@@ -107,7 +113,7 @@ export default function ClinicianDashboard() {
       activeEpisodes: 3,
       lastVisit: "2024-01-13",
       riskScore: 68,
-      status: "moderate"
+      status: "moderate",
     },
     {
       id: "P-004",
@@ -118,8 +124,8 @@ export default function ClinicianDashboard() {
       activeEpisodes: 1,
       lastVisit: "2024-01-12",
       riskScore: 25,
-      status: "improving"
-    }
+      status: "improving",
+    },
   ];
 
   const episodes: Episode[] = [
@@ -132,7 +138,7 @@ export default function ClinicianDashboard() {
       priority: "critical",
       lastUpdate: "15 min ago",
       daysActive: 3,
-      nextAction: "ICU monitoring review"
+      nextAction: "ICU monitoring review",
     },
     {
       id: "EP-2024-002",
@@ -143,7 +149,7 @@ export default function ClinicianDashboard() {
       priority: "medium",
       lastUpdate: "2 hours ago",
       daysActive: 45,
-      nextAction: "Lab results review"
+      nextAction: "Lab results review",
     },
     {
       id: "EP-2024-003",
@@ -154,7 +160,7 @@ export default function ClinicianDashboard() {
       priority: "high",
       lastUpdate: "4 hours ago",
       daysActive: 12,
-      nextAction: "Medication adjustment"
+      nextAction: "Medication adjustment",
     },
     {
       id: "EP-2024-004",
@@ -165,8 +171,8 @@ export default function ClinicianDashboard() {
       priority: "low",
       lastUpdate: "1 day ago",
       daysActive: 7,
-      nextAction: "Follow-up consultation"
-    }
+      nextAction: "Follow-up consultation",
+    },
   ];
 
   const alerts: Alert[] = [
@@ -176,7 +182,7 @@ export default function ClinicianDashboard() {
       patientName: "Maria Rodriguez",
       message: "Cardiac enzyme levels elevated - immediate attention required",
       time: "5 min ago",
-      acknowledged: false
+      acknowledged: false,
     },
     {
       id: "A-002",
@@ -184,7 +190,7 @@ export default function ClinicianDashboard() {
       patientName: "Sarah Chen",
       message: "Blood pressure outside target range",
       time: "1 hour ago",
-      acknowledged: false
+      acknowledged: false,
     },
     {
       id: "A-003",
@@ -192,36 +198,50 @@ export default function ClinicianDashboard() {
       patientName: "John Thompson",
       message: "Lab results available for review",
       time: "2 hours ago",
-      acknowledged: true
-    }
+      acknowledged: true,
+    },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "critical": return "text-red-600 bg-red-100";
-      case "moderate": return "text-orange-600 bg-orange-100";
-      case "stable": return "text-green-600 bg-green-100";
-      case "improving": return "text-blue-600 bg-blue-100";
-      default: return "text-gray-600 bg-gray-100";
+      case "critical":
+        return "text-red-600 bg-red-100";
+      case "moderate":
+        return "text-orange-600 bg-orange-100";
+      case "stable":
+        return "text-green-600 bg-green-100";
+      case "improving":
+        return "text-blue-600 bg-blue-100";
+      default:
+        return "text-gray-600 bg-gray-100";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical": return "bg-red-500";
-      case "high": return "bg-orange-500";
-      case "medium": return "bg-yellow-500";
-      case "low": return "bg-green-500";
-      default: return "bg-gray-500";
+      case "critical":
+        return "bg-red-500";
+      case "high":
+        return "bg-orange-500";
+      case "medium":
+        return "bg-yellow-500";
+      case "low":
+        return "bg-green-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
   const getAlertColor = (type: string) => {
     switch (type) {
-      case "critical": return "border-red-500 bg-red-50";
-      case "warning": return "border-yellow-500 bg-yellow-50";
-      case "info": return "border-blue-500 bg-blue-50";
-      default: return "border-gray-500 bg-gray-50";
+      case "critical":
+        return "border-red-500 bg-red-50";
+      case "warning":
+        return "border-yellow-500 bg-yellow-50";
+      case "info":
+        return "border-blue-500 bg-blue-50";
+      default:
+        return "border-gray-500 bg-gray-50";
     }
   };
 
@@ -231,7 +251,7 @@ export default function ClinicianDashboard() {
     criticalAlerts: 3,
     pendingActions: 12,
     scheduledVisits: 8,
-    labResults: 15
+    labResults: 15,
   };
 
   return (
@@ -240,8 +260,12 @@ export default function ClinicianDashboard() {
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Clinician Dashboard</h1>
-            <p className="text-gray-600 mt-1">Manage patient episodes and workflows</p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Clinician Dashboard
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Manage patient episodes and workflows
+            </p>
           </div>
           <div className="flex items-center space-x-3 mt-4 lg:mt-0">
             <Button variant="outline" size="sm">
@@ -252,7 +276,10 @@ export default function ClinicianDashboard() {
               <TestTube className="w-4 h-4 mr-2" />
               Lab Orders
             </Button>
-            <Button size="sm" className="bg-health-primary hover:bg-health-primary/90">
+            <Button
+              size="sm"
+              className="bg-health-primary hover:bg-health-primary/90"
+            >
               <Plus className="w-4 h-4 mr-2" />
               New Episode
             </Button>
@@ -266,67 +293,81 @@ export default function ClinicianDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Patients</p>
-                  <p className="text-2xl font-bold text-gray-900">{todayStats.totalPatients}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {todayStats.totalPatients}
+                  </p>
                 </div>
                 <Users className="w-6 h-6 text-blue-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Episodes</p>
-                  <p className="text-2xl font-bold text-gray-900">{todayStats.activeEpisodes}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {todayStats.activeEpisodes}
+                  </p>
                 </div>
                 <FileText className="w-6 h-6 text-green-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Critical</p>
-                  <p className="text-2xl font-bold text-red-600">{todayStats.criticalAlerts}</p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {todayStats.criticalAlerts}
+                  </p>
                 </div>
                 <AlertTriangle className="w-6 h-6 text-red-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Actions</p>
-                  <p className="text-2xl font-bold text-gray-900">{todayStats.pendingActions}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {todayStats.pendingActions}
+                  </p>
                 </div>
                 <Clock className="w-6 h-6 text-orange-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Visits</p>
-                  <p className="text-2xl font-bold text-gray-900">{todayStats.scheduledVisits}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {todayStats.scheduledVisits}
+                  </p>
                 </div>
                 <Calendar className="w-6 h-6 text-purple-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Lab Results</p>
-                  <p className="text-2xl font-bold text-gray-900">{todayStats.labResults}</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Lab Results
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {todayStats.labResults}
+                  </p>
                 </div>
                 <TestTube className="w-6 h-6 text-medical-600" />
               </div>
@@ -335,7 +376,7 @@ export default function ClinicianDashboard() {
         </div>
 
         {/* Critical Alerts */}
-        {alerts.filter(alert => !alert.acknowledged).length > 0 && (
+        {alerts.filter((alert) => !alert.acknowledged).length > 0 && (
           <Card className="mb-8 border-red-200 bg-red-50">
             <CardHeader>
               <CardTitle className="text-red-800 flex items-center">
@@ -345,26 +386,33 @@ export default function ClinicianDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {alerts.filter(alert => !alert.acknowledged).map((alert) => (
-                  <div key={alert.id} className={`p-3 rounded-lg border-l-4 ${getAlertColor(alert.type)}`}>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="font-medium text-gray-900">{alert.patientName}</p>
-                        <p className="text-sm text-gray-700">{alert.message}</p>
-                        <p className="text-xs text-gray-500">{alert.time}</p>
-                      </div>
-                      <div className="flex space-x-2">
-                        <Button size="sm" variant="outline">
-                          <Eye className="w-3 h-3 mr-1" />
-                          View
-                        </Button>
-                        <Button size="sm">
-                          Acknowledge
-                        </Button>
+                {alerts
+                  .filter((alert) => !alert.acknowledged)
+                  .map((alert) => (
+                    <div
+                      key={alert.id}
+                      className={`p-3 rounded-lg border-l-4 ${getAlertColor(alert.type)}`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="font-medium text-gray-900">
+                            {alert.patientName}
+                          </p>
+                          <p className="text-sm text-gray-700">
+                            {alert.message}
+                          </p>
+                          <p className="text-xs text-gray-500">{alert.time}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button size="sm" variant="outline">
+                            <Eye className="w-3 h-3 mr-1" />
+                            View
+                          </Button>
+                          <Button size="sm">Acknowledge</Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -382,7 +430,9 @@ export default function ClinicianDashboard() {
           {/* Episodes Tab */}
           <TabsContent value="episodes" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">Active Episodes</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Active Episodes
+              </h3>
               <div className="flex items-center space-x-2">
                 <Button variant="outline" size="sm">
                   <Filter className="w-4 h-4 mr-2" />
@@ -394,10 +444,13 @@ export default function ClinicianDashboard() {
                 </Button>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {episodes.map((episode) => (
-                <Card key={episode.id} className="hover:shadow-md transition-shadow">
+                <Card
+                  key={episode.id}
+                  className="hover:shadow-md transition-shadow"
+                >
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -405,10 +458,16 @@ export default function ClinicianDashboard() {
                           <Badge variant="outline" className="text-xs">
                             {episode.id}
                           </Badge>
-                          <div className={`w-2 h-2 rounded-full ${getPriorityColor(episode.priority)}`} />
-                          <span className="text-xs text-gray-500 capitalize">{episode.priority} priority</span>
+                          <div
+                            className={`w-2 h-2 rounded-full ${getPriorityColor(episode.priority)}`}
+                          />
+                          <span className="text-xs text-gray-500 capitalize">
+                            {episode.priority} priority
+                          </span>
                         </div>
-                        <CardTitle className="text-lg">{episode.patientName}</CardTitle>
+                        <CardTitle className="text-lg">
+                          {episode.patientName}
+                        </CardTitle>
                         <CardDescription className="mt-1">
                           {episode.diagnosis}
                         </CardDescription>
@@ -422,15 +481,23 @@ export default function ClinicianDashboard() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">Last Update</span>
-                        <span className="font-medium">{episode.lastUpdate}</span>
+                        <span className="font-medium">
+                          {episode.lastUpdate}
+                        </span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">Days Active</span>
-                        <span className="font-medium">{episode.daysActive}</span>
+                        <span className="font-medium">
+                          {episode.daysActive}
+                        </span>
                       </div>
                       <div className="pt-2 border-t">
-                        <p className="text-sm font-medium text-gray-900 mb-2">Next Action</p>
-                        <p className="text-sm text-gray-600">{episode.nextAction}</p>
+                        <p className="text-sm font-medium text-gray-900 mb-2">
+                          Next Action
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {episode.nextAction}
+                        </p>
                       </div>
                       <div className="flex space-x-2">
                         <Button size="sm" className="flex-1">
@@ -457,7 +524,10 @@ export default function ClinicianDashboard() {
           <TabsContent value="patients" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {patients.map((patient) => (
-                <Card key={patient.id} className="hover:shadow-md transition-shadow">
+                <Card
+                  key={patient.id}
+                  className="hover:shadow-md transition-shadow"
+                >
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-3">
@@ -465,7 +535,9 @@ export default function ClinicianDashboard() {
                           <User className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                          <CardTitle className="text-lg">{patient.name}</CardTitle>
+                          <CardTitle className="text-lg">
+                            {patient.name}
+                          </CardTitle>
                           <CardDescription>
                             {patient.age}y {patient.gender} • {patient.mrn}
                           </CardDescription>
@@ -480,7 +552,9 @@ export default function ClinicianDashboard() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">Active Episodes</span>
-                        <span className="font-medium">{patient.activeEpisodes}</span>
+                        <span className="font-medium">
+                          {patient.activeEpisodes}
+                        </span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">Last Visit</span>
@@ -488,8 +562,12 @@ export default function ClinicianDashboard() {
                       </div>
                       <div>
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm text-gray-600">Risk Score</span>
-                          <span className="text-sm font-medium">{patient.riskScore}</span>
+                          <span className="text-sm text-gray-600">
+                            Risk Score
+                          </span>
+                          <span className="text-sm font-medium">
+                            {patient.riskScore}
+                          </span>
                         </div>
                         <Progress value={patient.riskScore} className="h-2" />
                       </div>
@@ -531,8 +609,12 @@ export default function ClinicianDashboard() {
                       <div className="flex items-center space-x-3">
                         <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                         <div>
-                          <p className="font-medium text-red-900">Maria Rodriguez</p>
-                          <p className="text-sm text-red-700">Cardiac monitoring - Room 301</p>
+                          <p className="font-medium text-red-900">
+                            Maria Rodriguez
+                          </p>
+                          <p className="text-sm text-red-700">
+                            Cardiac monitoring - Room 301
+                          </p>
                         </div>
                       </div>
                       <Button size="sm" variant="outline">
@@ -540,23 +622,31 @@ export default function ClinicianDashboard() {
                         Monitor
                       </Button>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4">
                       <div className="p-3 bg-blue-50 rounded-lg">
                         <p className="text-sm text-blue-700">Heart Rate</p>
-                        <p className="text-2xl font-bold text-blue-900">98 BPM</p>
+                        <p className="text-2xl font-bold text-blue-900">
+                          98 BPM
+                        </p>
                       </div>
                       <div className="p-3 bg-green-50 rounded-lg">
                         <p className="text-sm text-green-700">Blood Pressure</p>
-                        <p className="text-2xl font-bold text-green-900">120/80</p>
+                        <p className="text-2xl font-bold text-green-900">
+                          120/80
+                        </p>
                       </div>
                       <div className="p-3 bg-purple-50 rounded-lg">
                         <p className="text-sm text-purple-700">O2 Saturation</p>
-                        <p className="text-2xl font-bold text-purple-900">98%</p>
+                        <p className="text-2xl font-bold text-purple-900">
+                          98%
+                        </p>
                       </div>
                       <div className="p-3 bg-orange-50 rounded-lg">
                         <p className="text-sm text-orange-700">Temperature</p>
-                        <p className="text-2xl font-bold text-orange-900">98.6°F</p>
+                        <p className="text-2xl font-bold text-orange-900">
+                          98.6°F
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -574,24 +664,42 @@ export default function ClinicianDashboard() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">Heart Rate Threshold</p>
-                        <p className="text-sm text-gray-600">Alert if &gt; 100 BPM</p>
+                        <p className="font-medium text-gray-900">
+                          Heart Rate Threshold
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Alert if &gt; 100 BPM
+                        </p>
                       </div>
-                      <Badge className="bg-green-100 text-green-800">Active</Badge>
+                      <Badge className="bg-green-100 text-green-800">
+                        Active
+                      </Badge>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">BP Critical Range</p>
-                        <p className="text-sm text-gray-600">Alert if &gt; 140/90</p>
+                        <p className="font-medium text-gray-900">
+                          BP Critical Range
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Alert if &gt; 140/90
+                        </p>
                       </div>
-                      <Badge className="bg-green-100 text-green-800">Active</Badge>
+                      <Badge className="bg-green-100 text-green-800">
+                        Active
+                      </Badge>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900">O2 Saturation</p>
-                        <p className="text-sm text-gray-600">Alert if &lt; 95%</p>
+                        <p className="font-medium text-gray-900">
+                          O2 Saturation
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Alert if &lt; 95%
+                        </p>
                       </div>
-                      <Badge className="bg-green-100 text-green-800">Active</Badge>
+                      <Badge className="bg-green-100 text-green-800">
+                        Active
+                      </Badge>
                     </div>
                   </div>
                 </CardContent>
@@ -613,17 +721,29 @@ export default function ClinicianDashboard() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-blue-900">HbA1c - John Thompson</p>
-                        <p className="text-sm text-blue-700">Ordered 2 hours ago</p>
+                        <p className="font-medium text-blue-900">
+                          HbA1c - John Thompson
+                        </p>
+                        <p className="text-sm text-blue-700">
+                          Ordered 2 hours ago
+                        </p>
                       </div>
-                      <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                      <Badge className="bg-yellow-100 text-yellow-800">
+                        Pending
+                      </Badge>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-green-900">Lipid Panel - Sarah Chen</p>
-                        <p className="text-sm text-green-700">Results available</p>
+                        <p className="font-medium text-green-900">
+                          Lipid Panel - Sarah Chen
+                        </p>
+                        <p className="text-sm text-green-700">
+                          Results available
+                        </p>
                       </div>
-                      <Badge className="bg-green-100 text-green-800">Completed</Badge>
+                      <Badge className="bg-green-100 text-green-800">
+                        Completed
+                      </Badge>
                     </div>
                   </div>
                   <Button className="w-full mt-4">
@@ -644,17 +764,29 @@ export default function ClinicianDashboard() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-purple-900">Metformin - John Thompson</p>
-                        <p className="text-sm text-purple-700">500mg twice daily</p>
+                        <p className="font-medium text-purple-900">
+                          Metformin - John Thompson
+                        </p>
+                        <p className="text-sm text-purple-700">
+                          500mg twice daily
+                        </p>
                       </div>
-                      <Badge className="bg-green-100 text-green-800">Active</Badge>
+                      <Badge className="bg-green-100 text-green-800">
+                        Active
+                      </Badge>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-orange-900">Lisinopril - Sarah Chen</p>
-                        <p className="text-sm text-orange-700">Renewal needed</p>
+                        <p className="font-medium text-orange-900">
+                          Lisinopril - Sarah Chen
+                        </p>
+                        <p className="text-sm text-orange-700">
+                          Renewal needed
+                        </p>
                       </div>
-                      <Badge className="bg-yellow-100 text-yellow-800">Expiring</Badge>
+                      <Badge className="bg-yellow-100 text-yellow-800">
+                        Expiring
+                      </Badge>
                     </div>
                   </div>
                   <Button className="w-full mt-4">
@@ -677,21 +809,27 @@ export default function ClinicianDashboard() {
                   <div className="space-y-4">
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium">Recovery Rate</span>
+                        <span className="text-sm font-medium">
+                          Recovery Rate
+                        </span>
                         <span className="text-sm text-green-600">↑ 12%</span>
                       </div>
                       <Progress value={87} className="h-2" />
                     </div>
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium">Readmission Rate</span>
+                        <span className="text-sm font-medium">
+                          Readmission Rate
+                        </span>
                         <span className="text-sm text-red-600">↓ 8%</span>
                       </div>
                       <Progress value={15} className="h-2" />
                     </div>
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium">Patient Satisfaction</span>
+                        <span className="text-sm font-medium">
+                          Patient Satisfaction
+                        </span>
                         <span className="text-sm text-green-600">↑ 5%</span>
                       </div>
                       <Progress value={92} className="h-2" />
@@ -708,21 +846,29 @@ export default function ClinicianDashboard() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-blue-900">Average Episode Duration</p>
+                        <p className="font-medium text-blue-900">
+                          Average Episode Duration
+                        </p>
                         <p className="text-sm text-blue-700">12.3 days</p>
                       </div>
                       <TrendingDown className="w-5 h-5 text-green-600" />
                     </div>
                     <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-green-900">Documentation Time</p>
-                        <p className="text-sm text-green-700">8.5 min/patient</p>
+                        <p className="font-medium text-green-900">
+                          Documentation Time
+                        </p>
+                        <p className="text-sm text-green-700">
+                          8.5 min/patient
+                        </p>
                       </div>
                       <TrendingDown className="w-5 h-5 text-green-600" />
                     </div>
                     <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-purple-900">Alert Response Time</p>
+                        <p className="font-medium text-purple-900">
+                          Alert Response Time
+                        </p>
                         <p className="text-sm text-purple-700">2.1 minutes</p>
                       </div>
                       <TrendingUp className="w-5 h-5 text-green-600" />

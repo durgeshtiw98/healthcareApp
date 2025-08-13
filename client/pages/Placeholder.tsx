@@ -1,5 +1,11 @@
 import Layout from "@/components/Layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Construction, ArrowLeft, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -10,10 +16,10 @@ interface PlaceholderProps {
   icon?: React.ComponentType<{ className?: string }>;
 }
 
-export default function Placeholder({ 
-  title, 
-  description, 
-  icon: Icon = Construction 
+export default function Placeholder({
+  title,
+  description,
+  icon: Icon = Construction,
 }: PlaceholderProps) {
   return (
     <Layout>
@@ -31,7 +37,8 @@ export default function Placeholder({
             </CardHeader>
             <CardContent className="text-center space-y-4">
               <p className="text-gray-600">
-                This page is coming soon! Continue prompting to help build out this section of the platform.
+                This page is coming soon! Continue prompting to help build out
+                this section of the platform.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild>
