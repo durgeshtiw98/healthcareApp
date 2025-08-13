@@ -80,6 +80,7 @@ interface Consent {
 
 export default function PatientDashboard() {
   const [selectedEpisode, setSelectedEpisode] = useState<string | null>(null);
+  const [episodeDetailsDialog, setEpisodeDetailsDialog] = useState<Episode | null>(null);
 
   const episodes: Episode[] = [
     {
