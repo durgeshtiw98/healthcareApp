@@ -153,6 +153,18 @@ const permissionTemplates: PermissionTemplate[] = [
 export default function PatientDashboard() {
   const [selectedEpisode, setSelectedEpisode] = useState<string | null>(null);
   const [episodeDetailsDialog, setEpisodeDetailsDialog] = useState<Episode | null>(null);
+  const [adminMode, setAdminMode] = useState(true); // Set to true to simulate admin access
+  const [modifyPermissionDialog, setModifyPermissionDialog] = useState<Consent | null>(null);
+  const [revokePermissionDialog, setRevokePermissionDialog] = useState<Consent | null>(null);
+  const [grantPermissionDialog, setGrantPermissionDialog] = useState(false);
+  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+  const [newConsentData, setNewConsentData] = useState({
+    grantedTo: "",
+    purpose: "",
+    expires: "",
+    customPermissions: [] as string[]
+  });
 
   const episodes: Episode[] = [
     {
