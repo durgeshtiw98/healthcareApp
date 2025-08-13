@@ -137,14 +137,15 @@ export default function Layout({ children }: LayoutProps) {
                 );
               })}
               <div className="pt-2 border-t border-medical-200 space-y-1">
-                <Button variant="outline" size="sm" className="w-full">
-                  Sign In
+                <Button variant="outline" size="sm" className="w-full" asChild>
+                  <Link to="/signin">Sign In</Link>
                 </Button>
                 <Button
                   size="sm"
                   className="w-full bg-health-primary hover:bg-health-primary/90"
+                  asChild
                 >
-                  Get Started
+                  <Link to="/signup">Get Started</Link>
                 </Button>
               </div>
             </div>
