@@ -524,11 +524,24 @@ export default function ClinicianDashboard() {
                           <p className="text-xs text-gray-500">{alert.time}</p>
                         </div>
                         <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setViewAlertDialog(alert)}
+                          >
                             <Eye className="w-3 h-3 mr-1" />
                             View
                           </Button>
-                          <Button size="sm">Acknowledge</Button>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setAcknowledgeAlertDialog(alert);
+                              setAcknowledgeReason("");
+                              setAcknowledgeAction("");
+                            }}
+                          >
+                            Acknowledge
+                          </Button>
                         </div>
                       </div>
                     </div>
