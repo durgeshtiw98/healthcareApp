@@ -11,11 +11,23 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Activity,
   AlertTriangle,
@@ -96,16 +108,23 @@ export default function ClinicianDashboard() {
   const [activeFilter, setActiveFilter] = useState<string>("all");
 
   // Episode dialog states
-  const [viewEpisodeDialog, setViewEpisodeDialog] = useState<Episode | null>(null);
-  const [editEpisodeDialog, setEditEpisodeDialog] = useState<Episode | null>(null);
-  const [noteEpisodeDialog, setNoteEpisodeDialog] = useState<Episode | null>(null);
+  const [viewEpisodeDialog, setViewEpisodeDialog] = useState<Episode | null>(
+    null,
+  );
+  const [editEpisodeDialog, setEditEpisodeDialog] = useState<Episode | null>(
+    null,
+  );
+  const [noteEpisodeDialog, setNoteEpisodeDialog] = useState<Episode | null>(
+    null,
+  );
   const [newNote, setNewNote] = useState("");
   const [editingEpisode, setEditingEpisode] = useState<Partial<Episode>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Alert dialog states
   const [viewAlertDialog, setViewAlertDialog] = useState<Alert | null>(null);
-  const [acknowledgeAlertDialog, setAcknowledgeAlertDialog] = useState<Alert | null>(null);
+  const [acknowledgeAlertDialog, setAcknowledgeAlertDialog] =
+    useState<Alert | null>(null);
   const [acknowledgeReason, setAcknowledgeReason] = useState("");
   const [acknowledgeAction, setAcknowledgeAction] = useState("");
 
@@ -219,23 +238,23 @@ export default function ClinicianDashboard() {
         "Troponin I": "45.2 ng/mL",
         "CK-MB": "28.5 ng/mL",
         "Heart Rate": "102 BPM",
-        "Blood Pressure": "145/92 mmHg"
+        "Blood Pressure": "145/92 mmHg",
       },
       normalRanges: {
         "Troponin I": "< 0.04 ng/mL",
         "CK-MB": "< 6.3 ng/mL",
         "Heart Rate": "60-100 BPM",
-        "Blood Pressure": "< 140/90 mmHg"
+        "Blood Pressure": "< 140/90 mmHg",
       },
       recommendations: [
         "Immediate cardiology consultation",
         "Continuous cardiac monitoring",
         "Serial troponin levels every 6 hours",
         "Consider emergency cardiac catheterization",
-        "Administer aspirin and anticoagulation per protocol"
+        "Administer aspirin and anticoagulation per protocol",
       ],
       triggeredBy: "Automated lab result analysis",
-      relatedEpisode: "EP-2024-001"
+      relatedEpisode: "EP-2024-001",
     },
     {
       id: "A-002",
@@ -252,23 +271,23 @@ export default function ClinicianDashboard() {
         "Systolic BP": "165 mmHg",
         "Diastolic BP": "98 mmHg",
         "Mean Arterial Pressure": "120 mmHg",
-        "Heart Rate": "88 BPM"
+        "Heart Rate": "88 BPM",
       },
       normalRanges: {
         "Systolic BP": "< 140 mmHg",
         "Diastolic BP": "< 90 mmHg",
         "Mean Arterial Pressure": "70-100 mmHg",
-        "Heart Rate": "60-100 BPM"
+        "Heart Rate": "60-100 BPM",
       },
       recommendations: [
         "Reassess current antihypertensive medications",
         "Check for medication compliance",
         "Consider dose adjustment or additional medication",
         "Monitor BP every 2 hours",
-        "Assess for hypertensive crisis symptoms"
+        "Assess for hypertensive crisis symptoms",
       ],
       triggeredBy: "Vital signs monitoring system",
-      relatedEpisode: "EP-2024-003"
+      relatedEpisode: "EP-2024-003",
     },
     {
       id: "A-003",
@@ -282,25 +301,25 @@ export default function ClinicianDashboard() {
       location: "Outpatient Clinic",
       mrn: "MRN-2024-002",
       currentValues: {
-        "HbA1c": "7.2%",
-        "Glucose": "145 mg/dL",
-        "Creatinine": "1.1 mg/dL",
-        "eGFR": "75 mL/min/1.73m²"
+        HbA1c: "7.2%",
+        Glucose: "145 mg/dL",
+        Creatinine: "1.1 mg/dL",
+        eGFR: "75 mL/min/1.73m²",
       },
       normalRanges: {
-        "HbA1c": "< 7.0%",
-        "Glucose": "70-140 mg/dL",
-        "Creatinine": "0.7-1.3 mg/dL",
-        "eGFR": "> 60 mL/min/1.73m²"
+        HbA1c: "< 7.0%",
+        Glucose: "70-140 mg/dL",
+        Creatinine: "0.7-1.3 mg/dL",
+        eGFR: "> 60 mL/min/1.73m²",
       },
       recommendations: [
         "Review diabetes management plan",
         "Consider medication adjustment",
         "Schedule follow-up in 3 months",
-        "Reinforce lifestyle modifications"
+        "Reinforce lifestyle modifications",
       ],
       triggeredBy: "Routine lab result processing",
-      relatedEpisode: "EP-2024-002"
+      relatedEpisode: "EP-2024-002",
     },
   ];
 
@@ -1033,7 +1052,10 @@ export default function ClinicianDashboard() {
       </div>
 
       {/* Episode View Dialog */}
-      <Dialog open={!!viewEpisodeDialog} onOpenChange={() => setViewEpisodeDialog(null)}>
+      <Dialog
+        open={!!viewEpisodeDialog}
+        onOpenChange={() => setViewEpisodeDialog(null)}
+      >
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center">
@@ -1050,28 +1072,48 @@ export default function ClinicianDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Episode Information</CardTitle>
+                    <CardTitle className="text-lg">
+                      Episode Information
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Patient</Label>
-                      <p className="text-gray-900">{viewEpisodeDialog.patientName}</p>
+                      <Label className="text-sm font-medium text-gray-600">
+                        Patient
+                      </Label>
+                      <p className="text-gray-900">
+                        {viewEpisodeDialog.patientName}
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Diagnosis</Label>
-                      <p className="text-gray-900">{viewEpisodeDialog.diagnosis}</p>
+                      <Label className="text-sm font-medium text-gray-600">
+                        Diagnosis
+                      </Label>
+                      <p className="text-gray-900">
+                        {viewEpisodeDialog.diagnosis}
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Status</Label>
-                      <Badge className={`${viewEpisodeDialog.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                      <Label className="text-sm font-medium text-gray-600">
+                        Status
+                      </Label>
+                      <Badge
+                        className={`${viewEpisodeDialog.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}
+                      >
                         {viewEpisodeDialog.status}
                       </Badge>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Priority</Label>
+                      <Label className="text-sm font-medium text-gray-600">
+                        Priority
+                      </Label>
                       <div className="flex items-center space-x-2">
-                        <div className={`w-3 h-3 rounded-full ${getPriorityColor(viewEpisodeDialog.priority)}`} />
-                        <span className="capitalize">{viewEpisodeDialog.priority}</span>
+                        <div
+                          className={`w-3 h-3 rounded-full ${getPriorityColor(viewEpisodeDialog.priority)}`}
+                        />
+                        <span className="capitalize">
+                          {viewEpisodeDialog.priority}
+                        </span>
                       </div>
                     </div>
                   </CardContent>
@@ -1079,20 +1121,34 @@ export default function ClinicianDashboard() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">Timeline & Activity</CardTitle>
+                    <CardTitle className="text-lg">
+                      Timeline & Activity
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Last Update</Label>
-                      <p className="text-gray-900">{viewEpisodeDialog.lastUpdate}</p>
+                      <Label className="text-sm font-medium text-gray-600">
+                        Last Update
+                      </Label>
+                      <p className="text-gray-900">
+                        {viewEpisodeDialog.lastUpdate}
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Days Active</Label>
-                      <p className="text-gray-900">{viewEpisodeDialog.daysActive} days</p>
+                      <Label className="text-sm font-medium text-gray-600">
+                        Days Active
+                      </Label>
+                      <p className="text-gray-900">
+                        {viewEpisodeDialog.daysActive} days
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-600">Next Action</Label>
-                      <p className="text-gray-900">{viewEpisodeDialog.nextAction}</p>
+                      <Label className="text-sm font-medium text-gray-600">
+                        Next Action
+                      </Label>
+                      <p className="text-gray-900">
+                        {viewEpisodeDialog.nextAction}
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -1105,14 +1161,30 @@ export default function ClinicianDashboard() {
                 <CardContent>
                   <div className="space-y-3">
                     {[
-                      { date: "2024-01-15 09:30", author: "Dr. Sarah Johnson", note: "Patient showing improvement in cardiac function. Echo results normal." },
-                      { date: "2024-01-14 14:20", author: "Nurse Kelly", note: "Vital signs stable. Patient ambulating well." },
-                      { date: "2024-01-13 11:15", author: "Dr. Sarah Johnson", note: "Post-operative check completed. Incision healing well." }
+                      {
+                        date: "2024-01-15 09:30",
+                        author: "Dr. Sarah Johnson",
+                        note: "Patient showing improvement in cardiac function. Echo results normal.",
+                      },
+                      {
+                        date: "2024-01-14 14:20",
+                        author: "Nurse Kelly",
+                        note: "Vital signs stable. Patient ambulating well.",
+                      },
+                      {
+                        date: "2024-01-13 11:15",
+                        author: "Dr. Sarah Johnson",
+                        note: "Post-operative check completed. Incision healing well.",
+                      },
                     ].map((note, index) => (
                       <div key={index} className="p-3 bg-gray-50 rounded-lg">
                         <div className="flex justify-between items-start mb-2">
-                          <span className="font-medium text-gray-900">{note.author}</span>
-                          <span className="text-sm text-gray-500">{note.date}</span>
+                          <span className="font-medium text-gray-900">
+                            {note.author}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {note.date}
+                          </span>
                         </div>
                         <p className="text-gray-700 text-sm">{note.note}</p>
                       </div>
@@ -1122,7 +1194,10 @@ export default function ClinicianDashboard() {
               </Card>
 
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setViewEpisodeDialog(null)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setViewEpisodeDialog(null)}
+                >
                   Close
                 </Button>
                 <Button
@@ -1142,7 +1217,10 @@ export default function ClinicianDashboard() {
       </Dialog>
 
       {/* Episode Edit Dialog */}
-      <Dialog open={!!editEpisodeDialog} onOpenChange={() => setEditEpisodeDialog(null)}>
+      <Dialog
+        open={!!editEpisodeDialog}
+        onOpenChange={() => setEditEpisodeDialog(null)}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center">
@@ -1155,22 +1233,29 @@ export default function ClinicianDashboard() {
           </DialogHeader>
 
           {editEpisodeDialog && (
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              setIsSubmitting(true);
-              // Simulate saving
-              setTimeout(() => {
-                setIsSubmitting(false);
-                setEditEpisodeDialog(null);
-              }, 1000);
-            }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                // Simulate saving
+                setTimeout(() => {
+                  setIsSubmitting(false);
+                  setEditEpisodeDialog(null);
+                }, 1000);
+              }}
+            >
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="edit-status">Episode Status</Label>
                     <Select
                       value={editingEpisode.status || editEpisodeDialog.status}
-                      onValueChange={(value) => setEditingEpisode(prev => ({ ...prev, status: value as any }))}
+                      onValueChange={(value) =>
+                        setEditingEpisode((prev) => ({
+                          ...prev,
+                          status: value as any,
+                        }))
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -1186,8 +1271,15 @@ export default function ClinicianDashboard() {
                   <div className="space-y-2">
                     <Label htmlFor="edit-priority">Priority Level</Label>
                     <Select
-                      value={editingEpisode.priority || editEpisodeDialog.priority}
-                      onValueChange={(value) => setEditingEpisode(prev => ({ ...prev, priority: value as any }))}
+                      value={
+                        editingEpisode.priority || editEpisodeDialog.priority
+                      }
+                      onValueChange={(value) =>
+                        setEditingEpisode((prev) => ({
+                          ...prev,
+                          priority: value as any,
+                        }))
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -1206,8 +1298,15 @@ export default function ClinicianDashboard() {
                   <Label htmlFor="edit-diagnosis">Diagnosis</Label>
                   <Input
                     id="edit-diagnosis"
-                    value={editingEpisode.diagnosis || editEpisodeDialog.diagnosis}
-                    onChange={(e) => setEditingEpisode(prev => ({ ...prev, diagnosis: e.target.value }))}
+                    value={
+                      editingEpisode.diagnosis || editEpisodeDialog.diagnosis
+                    }
+                    onChange={(e) =>
+                      setEditingEpisode((prev) => ({
+                        ...prev,
+                        diagnosis: e.target.value,
+                      }))
+                    }
                     placeholder="Update diagnosis..."
                   />
                 </div>
@@ -1216,8 +1315,15 @@ export default function ClinicianDashboard() {
                   <Label htmlFor="edit-next-action">Next Action</Label>
                   <Textarea
                     id="edit-next-action"
-                    value={editingEpisode.nextAction || editEpisodeDialog.nextAction}
-                    onChange={(e) => setEditingEpisode(prev => ({ ...prev, nextAction: e.target.value }))}
+                    value={
+                      editingEpisode.nextAction || editEpisodeDialog.nextAction
+                    }
+                    onChange={(e) =>
+                      setEditingEpisode((prev) => ({
+                        ...prev,
+                        nextAction: e.target.value,
+                      }))
+                    }
                     placeholder="Update next action..."
                     rows={3}
                   />
@@ -1252,7 +1358,10 @@ export default function ClinicianDashboard() {
       </Dialog>
 
       {/* Episode Notes Dialog */}
-      <Dialog open={!!noteEpisodeDialog} onOpenChange={() => setNoteEpisodeDialog(null)}>
+      <Dialog
+        open={!!noteEpisodeDialog}
+        onOpenChange={() => setNoteEpisodeDialog(null)}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center">
@@ -1265,24 +1374,33 @@ export default function ClinicianDashboard() {
           </DialogHeader>
 
           {noteEpisodeDialog && (
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              setIsSubmitting(true);
-              // Simulate saving note
-              setTimeout(() => {
-                setIsSubmitting(false);
-                setNoteEpisodeDialog(null);
-                setNewNote("");
-              }, 1000);
-            }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                // Simulate saving note
+                setTimeout(() => {
+                  setIsSubmitting(false);
+                  setNoteEpisodeDialog(null);
+                  setNewNote("");
+                }, 1000);
+              }}
+            >
               <div className="space-y-4">
                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <div className="flex items-start space-x-3">
                     <FileText className="w-5 h-5 text-blue-600 mt-0.5" />
                     <div>
-                      <h4 className="font-medium text-blue-900">Episode: {noteEpisodeDialog.diagnosis}</h4>
-                      <p className="text-sm text-blue-700">Status: {noteEpisodeDialog.status} • Priority: {noteEpisodeDialog.priority}</p>
-                      <p className="text-sm text-blue-700">Last update: {noteEpisodeDialog.lastUpdate}</p>
+                      <h4 className="font-medium text-blue-900">
+                        Episode: {noteEpisodeDialog.diagnosis}
+                      </h4>
+                      <p className="text-sm text-blue-700">
+                        Status: {noteEpisodeDialog.status} • Priority:{" "}
+                        {noteEpisodeDialog.priority}
+                      </p>
+                      <p className="text-sm text-blue-700">
+                        Last update: {noteEpisodeDialog.lastUpdate}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1314,7 +1432,8 @@ export default function ClinicianDashboard() {
                     required
                   />
                   <p className="text-sm text-gray-500">
-                    This note will be part of the permanent medical record and subject to audit.
+                    This note will be part of the permanent medical record and
+                    subject to audit.
                   </p>
                 </div>
 
@@ -1352,7 +1471,10 @@ export default function ClinicianDashboard() {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isSubmitting || !newNote.trim()}>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || !newNote.trim()}
+                >
                   {isSubmitting ? "Saving Note..." : "Save Note"}
                 </Button>
               </div>
@@ -1362,40 +1484,62 @@ export default function ClinicianDashboard() {
       </Dialog>
 
       {/* Alert View Dialog */}
-      <Dialog open={!!viewAlertDialog} onOpenChange={() => setViewAlertDialog(null)}>
+      <Dialog
+        open={!!viewAlertDialog}
+        onOpenChange={() => setViewAlertDialog(null)}
+      >
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center">
-              <AlertTriangle className={`w-5 h-5 mr-2 ${
-                viewAlertDialog?.type === 'critical' ? 'text-red-600' :
-                viewAlertDialog?.type === 'warning' ? 'text-yellow-600' : 'text-blue-600'
-              }`} />
+              <AlertTriangle
+                className={`w-5 h-5 mr-2 ${
+                  viewAlertDialog?.type === "critical"
+                    ? "text-red-600"
+                    : viewAlertDialog?.type === "warning"
+                      ? "text-yellow-600"
+                      : "text-blue-600"
+                }`}
+              />
               Critical Alert Details - {viewAlertDialog?.patientName}
             </DialogTitle>
             <DialogDescription>
-              {viewAlertDialog?.mrn} • {viewAlertDialog?.location} • {viewAlertDialog?.time}
+              {viewAlertDialog?.mrn} • {viewAlertDialog?.location} •{" "}
+              {viewAlertDialog?.time}
             </DialogDescription>
           </DialogHeader>
 
           {viewAlertDialog && (
             <div className="space-y-6">
               {/* Alert Summary */}
-              <Card className={`border-l-4 ${
-                viewAlertDialog.type === 'critical' ? 'border-red-500 bg-red-50' :
-                viewAlertDialog.type === 'warning' ? 'border-yellow-500 bg-yellow-50' : 'border-blue-500 bg-blue-50'
-              }`}>
+              <Card
+                className={`border-l-4 ${
+                  viewAlertDialog.type === "critical"
+                    ? "border-red-500 bg-red-50"
+                    : viewAlertDialog.type === "warning"
+                      ? "border-yellow-500 bg-yellow-50"
+                      : "border-blue-500 bg-blue-50"
+                }`}
+              >
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{viewAlertDialog.message}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {viewAlertDialog.message}
+                      </h3>
                       <p className="text-sm text-gray-600 mt-1">
-                        Category: {viewAlertDialog.category} • Severity: {viewAlertDialog.severity}
+                        Category: {viewAlertDialog.category} • Severity:{" "}
+                        {viewAlertDialog.severity}
                       </p>
                     </div>
-                    <Badge className={`${
-                      viewAlertDialog.type === 'critical' ? 'bg-red-500' :
-                      viewAlertDialog.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
-                    } text-white`}>
+                    <Badge
+                      className={`${
+                        viewAlertDialog.type === "critical"
+                          ? "bg-red-500"
+                          : viewAlertDialog.type === "warning"
+                            ? "bg-yellow-500"
+                            : "bg-blue-500"
+                      } text-white`}
+                    >
                       {viewAlertDialog.type.toUpperCase()}
                     </Badge>
                   </div>
@@ -1403,7 +1547,8 @@ export default function ClinicianDashboard() {
                     <strong>Triggered by:</strong> {viewAlertDialog.triggeredBy}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Related Episode:</strong> {viewAlertDialog.relatedEpisode}
+                    <strong>Related Episode:</strong>{" "}
+                    {viewAlertDialog.relatedEpisode}
                   </p>
                 </CardContent>
               </Card>
@@ -1419,12 +1564,21 @@ export default function ClinicianDashboard() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {Object.entries(viewAlertDialog.currentValues).map(([key, value]) => (
-                        <div key={key} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                          <span className="font-medium text-gray-900">{key}</span>
-                          <span className="text-lg font-bold text-red-600">{value}</span>
-                        </div>
-                      ))}
+                      {Object.entries(viewAlertDialog.currentValues).map(
+                        ([key, value]) => (
+                          <div
+                            key={key}
+                            className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                          >
+                            <span className="font-medium text-gray-900">
+                              {key}
+                            </span>
+                            <span className="text-lg font-bold text-red-600">
+                              {value}
+                            </span>
+                          </div>
+                        ),
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -1439,12 +1593,21 @@ export default function ClinicianDashboard() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {Object.entries(viewAlertDialog.normalRanges).map(([key, value]) => (
-                        <div key={key} className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                          <span className="font-medium text-gray-900">{key}</span>
-                          <span className="text-sm font-medium text-green-700">{value}</span>
-                        </div>
-                      ))}
+                      {Object.entries(viewAlertDialog.normalRanges).map(
+                        ([key, value]) => (
+                          <div
+                            key={key}
+                            className="flex justify-between items-center p-3 bg-green-50 rounded-lg"
+                          >
+                            <span className="font-medium text-gray-900">
+                              {key}
+                            </span>
+                            <span className="text-sm font-medium text-green-700">
+                              {value}
+                            </span>
+                          </div>
+                        ),
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -1460,20 +1623,30 @@ export default function ClinicianDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {viewAlertDialog.recommendations.map((recommendation, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
-                        <div className="w-6 h-6 bg-health-primary text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
-                          {index + 1}
+                    {viewAlertDialog.recommendations.map(
+                      (recommendation, index) => (
+                        <div
+                          key={index}
+                          className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg"
+                        >
+                          <div className="w-6 h-6 bg-health-primary text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                            {index + 1}
+                          </div>
+                          <p className="text-gray-900 flex-1">
+                            {recommendation}
+                          </p>
                         </div>
-                        <p className="text-gray-900 flex-1">{recommendation}</p>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </CardContent>
               </Card>
 
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setViewAlertDialog(null)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setViewAlertDialog(null)}
+                >
                   Close
                 </Button>
                 <Button
@@ -1495,7 +1668,10 @@ export default function ClinicianDashboard() {
       </Dialog>
 
       {/* Alert Acknowledge Dialog */}
-      <Dialog open={!!acknowledgeAlertDialog} onOpenChange={() => setAcknowledgeAlertDialog(null)}>
+      <Dialog
+        open={!!acknowledgeAlertDialog}
+        onOpenChange={() => setAcknowledgeAlertDialog(null)}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center">
@@ -1508,60 +1684,97 @@ export default function ClinicianDashboard() {
           </DialogHeader>
 
           {acknowledgeAlertDialog && (
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              setIsSubmitting(true);
-              // Simulate acknowledgment
-              setTimeout(() => {
-                setIsSubmitting(false);
-                setAcknowledgeAlertDialog(null);
-                setAcknowledgeReason("");
-                setAcknowledgeAction("");
-              }, 1000);
-            }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                // Simulate acknowledgment
+                setTimeout(() => {
+                  setIsSubmitting(false);
+                  setAcknowledgeAlertDialog(null);
+                  setAcknowledgeReason("");
+                  setAcknowledgeAction("");
+                }, 1000);
+              }}
+            >
               <div className="space-y-4">
                 {/* Alert Summary */}
-                <div className={`p-4 rounded-lg border-l-4 ${
-                  acknowledgeAlertDialog.type === 'critical' ? 'border-red-500 bg-red-50' :
-                  acknowledgeAlertDialog.type === 'warning' ? 'border-yellow-500 bg-yellow-50' : 'border-blue-500 bg-blue-50'
-                }`}>
+                <div
+                  className={`p-4 rounded-lg border-l-4 ${
+                    acknowledgeAlertDialog.type === "critical"
+                      ? "border-red-500 bg-red-50"
+                      : acknowledgeAlertDialog.type === "warning"
+                        ? "border-yellow-500 bg-yellow-50"
+                        : "border-blue-500 bg-blue-50"
+                  }`}
+                >
                   <div className="flex items-start space-x-3">
-                    <AlertTriangle className={`w-5 h-5 mt-0.5 ${
-                      acknowledgeAlertDialog.type === 'critical' ? 'text-red-600' :
-                      acknowledgeAlertDialog.type === 'warning' ? 'text-yellow-600' : 'text-blue-600'
-                    }`} />
+                    <AlertTriangle
+                      className={`w-5 h-5 mt-0.5 ${
+                        acknowledgeAlertDialog.type === "critical"
+                          ? "text-red-600"
+                          : acknowledgeAlertDialog.type === "warning"
+                            ? "text-yellow-600"
+                            : "text-blue-600"
+                      }`}
+                    />
                     <div>
-                      <h4 className="font-medium text-gray-900">{acknowledgeAlertDialog.message}</h4>
+                      <h4 className="font-medium text-gray-900">
+                        {acknowledgeAlertDialog.message}
+                      </h4>
                       <p className="text-sm text-gray-600 mt-1">
-                        {acknowledgeAlertDialog.location} • {acknowledgeAlertDialog.time}
+                        {acknowledgeAlertDialog.location} •{" "}
+                        {acknowledgeAlertDialog.time}
                       </p>
                       <p className="text-sm text-gray-600">
-                        Severity: {acknowledgeAlertDialog.severity} • Category: {acknowledgeAlertDialog.category}
+                        Severity: {acknowledgeAlertDialog.severity} • Category:{" "}
+                        {acknowledgeAlertDialog.category}
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="acknowledge-reason">Acknowledgment Reason</Label>
-                  <Select value={acknowledgeReason} onValueChange={setAcknowledgeReason}>
+                  <Label htmlFor="acknowledge-reason">
+                    Acknowledgment Reason
+                  </Label>
+                  <Select
+                    value={acknowledgeReason}
+                    onValueChange={setAcknowledgeReason}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select reason for acknowledgment" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="reviewed-addressed">Reviewed and Addressed</SelectItem>
-                      <SelectItem value="already-aware">Already Aware - Under Treatment</SelectItem>
-                      <SelectItem value="false-positive">False Positive</SelectItem>
-                      <SelectItem value="patient-stable">Patient Clinically Stable</SelectItem>
-                      <SelectItem value="specialist-consulted">Specialist Consulted</SelectItem>
-                      <SelectItem value="monitoring-continued">Continued Monitoring Arranged</SelectItem>
-                      <SelectItem value="other">Other (specify in action plan)</SelectItem>
+                      <SelectItem value="reviewed-addressed">
+                        Reviewed and Addressed
+                      </SelectItem>
+                      <SelectItem value="already-aware">
+                        Already Aware - Under Treatment
+                      </SelectItem>
+                      <SelectItem value="false-positive">
+                        False Positive
+                      </SelectItem>
+                      <SelectItem value="patient-stable">
+                        Patient Clinically Stable
+                      </SelectItem>
+                      <SelectItem value="specialist-consulted">
+                        Specialist Consulted
+                      </SelectItem>
+                      <SelectItem value="monitoring-continued">
+                        Continued Monitoring Arranged
+                      </SelectItem>
+                      <SelectItem value="other">
+                        Other (specify in action plan)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="acknowledge-action">Action Plan & Clinical Notes</Label>
+                  <Label htmlFor="acknowledge-action">
+                    Action Plan & Clinical Notes
+                  </Label>
                   <Textarea
                     id="acknowledge-action"
                     value={acknowledgeAction}
@@ -1571,13 +1784,16 @@ export default function ClinicianDashboard() {
                     required
                   />
                   <p className="text-xs text-gray-500">
-                    This acknowledgment will be recorded in the patient's medical record and audit log.
+                    This acknowledgment will be recorded in the patient's
+                    medical record and audit log.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="acknowledge-time">Acknowledgment Time</Label>
+                    <Label htmlFor="acknowledge-time">
+                      Acknowledgment Time
+                    </Label>
                     <Input
                       id="acknowledge-time"
                       type="datetime-local"
@@ -1586,17 +1802,25 @@ export default function ClinicianDashboard() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="acknowledge-priority">Follow-up Priority</Label>
+                    <Label htmlFor="acknowledge-priority">
+                      Follow-up Priority
+                    </Label>
                     <Select defaultValue="routine">
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="immediate">Immediate</SelectItem>
-                        <SelectItem value="urgent">Urgent (within 1 hour)</SelectItem>
-                        <SelectItem value="priority">Priority (within 4 hours)</SelectItem>
+                        <SelectItem value="urgent">
+                          Urgent (within 1 hour)
+                        </SelectItem>
+                        <SelectItem value="priority">
+                          Priority (within 4 hours)
+                        </SelectItem>
                         <SelectItem value="routine">Routine</SelectItem>
-                        <SelectItem value="resolved">Resolved - No follow-up needed</SelectItem>
+                        <SelectItem value="resolved">
+                          Resolved - No follow-up needed
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -1607,7 +1831,12 @@ export default function ClinicianDashboard() {
                     <AlertTriangle className="w-4 h-4 text-yellow-600 mt-0.5" />
                     <div className="text-sm text-yellow-800">
                       <p className="font-medium">Important Notice</p>
-                      <p>Acknowledging this alert confirms you have reviewed the patient's condition and taken appropriate clinical action. This will be permanently documented in the medical record.</p>
+                      <p>
+                        Acknowledging this alert confirms you have reviewed the
+                        patient's condition and taken appropriate clinical
+                        action. This will be permanently documented in the
+                        medical record.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -1624,7 +1853,11 @@ export default function ClinicianDashboard() {
                 </Button>
                 <Button
                   type="submit"
-                  disabled={isSubmitting || !acknowledgeReason || !acknowledgeAction.trim()}
+                  disabled={
+                    isSubmitting ||
+                    !acknowledgeReason ||
+                    !acknowledgeAction.trim()
+                  }
                   className="bg-green-600 hover:bg-green-700"
                 >
                   {isSubmitting ? "Acknowledging..." : "Acknowledge Alert"}
