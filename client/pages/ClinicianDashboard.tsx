@@ -202,6 +202,31 @@ export default function ClinicianDashboard() {
       message: "Cardiac enzyme levels elevated - immediate attention required",
       time: "5 min ago",
       acknowledged: false,
+      severity: "Critical",
+      category: "Cardiac",
+      location: "CCU - Room 301",
+      mrn: "MRN-2024-001",
+      currentValues: {
+        "Troponin I": "45.2 ng/mL",
+        "CK-MB": "28.5 ng/mL",
+        "Heart Rate": "102 BPM",
+        "Blood Pressure": "145/92 mmHg"
+      },
+      normalRanges: {
+        "Troponin I": "< 0.04 ng/mL",
+        "CK-MB": "< 6.3 ng/mL",
+        "Heart Rate": "60-100 BPM",
+        "Blood Pressure": "< 140/90 mmHg"
+      },
+      recommendations: [
+        "Immediate cardiology consultation",
+        "Continuous cardiac monitoring",
+        "Serial troponin levels every 6 hours",
+        "Consider emergency cardiac catheterization",
+        "Administer aspirin and anticoagulation per protocol"
+      ],
+      triggeredBy: "Automated lab result analysis",
+      relatedEpisode: "EP-2024-001"
     },
     {
       id: "A-002",
@@ -210,6 +235,31 @@ export default function ClinicianDashboard() {
       message: "Blood pressure outside target range",
       time: "1 hour ago",
       acknowledged: false,
+      severity: "High",
+      category: "Cardiovascular",
+      location: "Medical Ward - Room 205",
+      mrn: "MRN-2024-003",
+      currentValues: {
+        "Systolic BP": "165 mmHg",
+        "Diastolic BP": "98 mmHg",
+        "Mean Arterial Pressure": "120 mmHg",
+        "Heart Rate": "88 BPM"
+      },
+      normalRanges: {
+        "Systolic BP": "< 140 mmHg",
+        "Diastolic BP": "< 90 mmHg",
+        "Mean Arterial Pressure": "70-100 mmHg",
+        "Heart Rate": "60-100 BPM"
+      },
+      recommendations: [
+        "Reassess current antihypertensive medications",
+        "Check for medication compliance",
+        "Consider dose adjustment or additional medication",
+        "Monitor BP every 2 hours",
+        "Assess for hypertensive crisis symptoms"
+      ],
+      triggeredBy: "Vital signs monitoring system",
+      relatedEpisode: "EP-2024-003"
     },
     {
       id: "A-003",
@@ -218,6 +268,30 @@ export default function ClinicianDashboard() {
       message: "Lab results available for review",
       time: "2 hours ago",
       acknowledged: true,
+      severity: "Low",
+      category: "Laboratory",
+      location: "Outpatient Clinic",
+      mrn: "MRN-2024-002",
+      currentValues: {
+        "HbA1c": "7.2%",
+        "Glucose": "145 mg/dL",
+        "Creatinine": "1.1 mg/dL",
+        "eGFR": "75 mL/min/1.73m²"
+      },
+      normalRanges: {
+        "HbA1c": "< 7.0%",
+        "Glucose": "70-140 mg/dL",
+        "Creatinine": "0.7-1.3 mg/dL",
+        "eGFR": "> 60 mL/min/1.73m²"
+      },
+      recommendations: [
+        "Review diabetes management plan",
+        "Consider medication adjustment",
+        "Schedule follow-up in 3 months",
+        "Reinforce lifestyle modifications"
+      ],
+      triggeredBy: "Routine lab result processing",
+      relatedEpisode: "EP-2024-002"
     },
   ];
 
