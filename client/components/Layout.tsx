@@ -84,14 +84,15 @@ export default function Layout({ children }: LayoutProps) {
               </Button>
 
               <div className="hidden md:flex items-center space-x-2">
-                <Button variant="outline" size="sm">
-                  Sign In
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/signin">Sign In</Link>
                 </Button>
                 <Button
                   size="sm"
                   className="bg-health-primary hover:bg-health-primary/90"
+                  asChild
                 >
-                  Get Started
+                  <Link to="/signup">Get Started</Link>
                 </Button>
               </div>
 
