@@ -86,6 +86,14 @@ export default function ClinicianDashboard() {
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("all");
 
+  // Episode dialog states
+  const [viewEpisodeDialog, setViewEpisodeDialog] = useState<Episode | null>(null);
+  const [editEpisodeDialog, setEditEpisodeDialog] = useState<Episode | null>(null);
+  const [noteEpisodeDialog, setNoteEpisodeDialog] = useState<Episode | null>(null);
+  const [newNote, setNewNote] = useState("");
+  const [editingEpisode, setEditingEpisode] = useState<Partial<Episode>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const patients: Patient[] = [
     {
       id: "P-001",
