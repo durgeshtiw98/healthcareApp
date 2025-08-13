@@ -18,7 +18,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 200 100% 40%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -35,25 +35,43 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 200 100% 40%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Healthcare theme colors */
+    --health-primary: 200 100% 40%;
+    --health-primary-foreground: 0 0% 100%;
+    --health-secondary: 168 100% 40%;
+    --health-secondary-foreground: 0 0% 100%;
+    --health-success: 142 76% 36%;
+    --health-success-foreground: 0 0% 100%;
+    --health-warning: 38 92% 50%;
+    --health-warning-foreground: 0 0% 100%;
+    --health-critical: 0 84% 60%;
+    --health-critical-foreground: 0 0% 100%;
+
+    /* Medical color scale - Teal-based medical palette */
+    --medical-50: 166 76% 97%;
+    --medical-100: 167 85% 89%;
+    --medical-200: 168 84% 78%;
+    --medical-300: 171 77% 64%;
+    --medical-400: 172 66% 50%;
+    --medical-500: 173 80% 40%;
+    --medical-600: 175 84% 32%;
+    --medical-700: 175 77% 26%;
+    --medical-800: 176 69% 22%;
+    --medical-900: 176 61% 19%;
+    --medical-950: 179 84% 10%;
   }
 
   .dark {
@@ -66,7 +84,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
+    --primary: 200 100% 50%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -92,6 +110,31 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Healthcare theme colors - dark mode */
+    --health-primary: 200 100% 50%;
+    --health-primary-foreground: 222.2 47.4% 11.2%;
+    --health-secondary: 168 100% 50%;
+    --health-secondary-foreground: 222.2 47.4% 11.2%;
+    --health-success: 142 76% 46%;
+    --health-success-foreground: 222.2 47.4% 11.2%;
+    --health-warning: 38 92% 60%;
+    --health-warning-foreground: 222.2 47.4% 11.2%;
+    --health-critical: 0 84% 70%;
+    --health-critical-foreground: 222.2 47.4% 11.2%;
+
+    /* Medical color scale - dark mode */
+    --medical-50: 179 84% 10%;
+    --medical-100: 176 61% 19%;
+    --medical-200: 176 69% 22%;
+    --medical-300: 175 77% 26%;
+    --medical-400: 175 84% 32%;
+    --medical-500: 173 80% 40%;
+    --medical-600: 172 66% 50%;
+    --medical-700: 171 77% 64%;
+    --medical-800: 168 84% 78%;
+    --medical-900: 167 85% 89%;
+    --medical-950: 166 76% 97%;
   }
 }
 
