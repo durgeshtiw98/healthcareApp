@@ -1360,6 +1360,280 @@ export default function ClinicianDashboard() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Alert View Dialog */}
+      <Dialog open={!!viewAlertDialog} onOpenChange={() => setViewAlertDialog(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <AlertTriangle className={`w-5 h-5 mr-2 ${
+                viewAlertDialog?.type === 'critical' ? 'text-red-600' :
+                viewAlertDialog?.type === 'warning' ? 'text-yellow-600' : 'text-blue-600'
+              }`} />
+              Critical Alert Details - {viewAlertDialog?.patientName}
+            </DialogTitle>
+            <DialogDescription>
+              {viewAlertDialog?.mrn} • {viewAlertDialog?.location} • {viewAlertDialog?.time}
+            </DialogDescription>
+          </DialogHeader>
+
+          {viewAlertDialog && (
+            <div className="space-y-6">
+              {/* Alert Summary */}
+              <Card className={`border-l-4 ${
+                viewAlertDialog.type === 'critical' ? 'border-red-500 bg-red-50' :
+                viewAlertDialog.type === 'warning' ? 'border-yellow-500 bg-yellow-50' : 'border-blue-500 bg-blue-50'
+              }`}>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">{viewAlertDialog.message}</h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Category: {viewAlertDialog.category} • Severity: {viewAlertDialog.severity}
+                      </p>
+                    </div>
+                    <Badge className={`${
+                      viewAlertDialog.type === 'critical' ? 'bg-red-500' :
+                      viewAlertDialog.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+                    } text-white`}>
+                      {viewAlertDialog.type.toUpperCase()}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-gray-700">
+                    <strong>Triggered by:</strong> {viewAlertDialog.triggeredBy}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    <strong>Related Episode:</strong> {viewAlertDialog.relatedEpisode}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Current Values */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center">
+                      <TrendingUp className="w-5 h-5 mr-2 text-red-600" />
+                      Current Values
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {Object.entries(viewAlertDialog.currentValues).map(([key, value]) => (
+                        <div key={key} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                          <span className="font-medium text-gray-900">{key}</span>
+                          <span className="text-lg font-bold text-red-600">{value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Normal Ranges */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center">
+                      <CheckCircle className="w-5 h-5 mr-2 text-green-600" />
+                      Normal Ranges
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {Object.entries(viewAlertDialog.normalRanges).map(([key, value]) => (
+                        <div key={key} className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                          <span className="font-medium text-gray-900">{key}</span>
+                          <span className="text-sm font-medium text-green-700">{value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Clinical Recommendations */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center">
+                    <Stethoscope className="w-5 h-5 mr-2 text-health-primary" />
+                    Clinical Recommendations
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {viewAlertDialog.recommendations.map((recommendation, index) => (
+                      <div key={index} className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
+                        <div className="w-6 h-6 bg-health-primary text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                          {index + 1}
+                        </div>
+                        <p className="text-gray-900 flex-1">{recommendation}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => setViewAlertDialog(null)}>
+                  Close
+                </Button>
+                <Button
+                  onClick={() => {
+                    setAcknowledgeAlertDialog(viewAlertDialog);
+                    setViewAlertDialog(null);
+                    setAcknowledgeReason("");
+                    setAcknowledgeAction("");
+                  }}
+                  className="bg-health-primary hover:bg-health-primary/90"
+                >
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Acknowledge Alert
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Alert Acknowledge Dialog */}
+      <Dialog open={!!acknowledgeAlertDialog} onOpenChange={() => setAcknowledgeAlertDialog(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <CheckCircle className="w-5 h-5 mr-2 text-green-600" />
+              Acknowledge Alert - {acknowledgeAlertDialog?.patientName}
+            </DialogTitle>
+            <DialogDescription>
+              Document your acknowledgment and planned actions for this alert
+            </DialogDescription>
+          </DialogHeader>
+
+          {acknowledgeAlertDialog && (
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              setIsSubmitting(true);
+              // Simulate acknowledgment
+              setTimeout(() => {
+                setIsSubmitting(false);
+                setAcknowledgeAlertDialog(null);
+                setAcknowledgeReason("");
+                setAcknowledgeAction("");
+              }, 1000);
+            }}>
+              <div className="space-y-4">
+                {/* Alert Summary */}
+                <div className={`p-4 rounded-lg border-l-4 ${
+                  acknowledgeAlertDialog.type === 'critical' ? 'border-red-500 bg-red-50' :
+                  acknowledgeAlertDialog.type === 'warning' ? 'border-yellow-500 bg-yellow-50' : 'border-blue-500 bg-blue-50'
+                }`}>
+                  <div className="flex items-start space-x-3">
+                    <AlertTriangle className={`w-5 h-5 mt-0.5 ${
+                      acknowledgeAlertDialog.type === 'critical' ? 'text-red-600' :
+                      acknowledgeAlertDialog.type === 'warning' ? 'text-yellow-600' : 'text-blue-600'
+                    }`} />
+                    <div>
+                      <h4 className="font-medium text-gray-900">{acknowledgeAlertDialog.message}</h4>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {acknowledgeAlertDialog.location} • {acknowledgeAlertDialog.time}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Severity: {acknowledgeAlertDialog.severity} • Category: {acknowledgeAlertDialog.category}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="acknowledge-reason">Acknowledgment Reason</Label>
+                  <Select value={acknowledgeReason} onValueChange={setAcknowledgeReason}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select reason for acknowledgment" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="reviewed-addressed">Reviewed and Addressed</SelectItem>
+                      <SelectItem value="already-aware">Already Aware - Under Treatment</SelectItem>
+                      <SelectItem value="false-positive">False Positive</SelectItem>
+                      <SelectItem value="patient-stable">Patient Clinically Stable</SelectItem>
+                      <SelectItem value="specialist-consulted">Specialist Consulted</SelectItem>
+                      <SelectItem value="monitoring-continued">Continued Monitoring Arranged</SelectItem>
+                      <SelectItem value="other">Other (specify in action plan)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="acknowledge-action">Action Plan & Clinical Notes</Label>
+                  <Textarea
+                    id="acknowledge-action"
+                    value={acknowledgeAction}
+                    onChange={(e) => setAcknowledgeAction(e.target.value)}
+                    placeholder="Describe the actions taken or planned in response to this alert..."
+                    rows={4}
+                    required
+                  />
+                  <p className="text-xs text-gray-500">
+                    This acknowledgment will be recorded in the patient's medical record and audit log.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="acknowledge-time">Acknowledgment Time</Label>
+                    <Input
+                      id="acknowledge-time"
+                      type="datetime-local"
+                      defaultValue={new Date().toISOString().slice(0, 16)}
+                      disabled
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="acknowledge-priority">Follow-up Priority</Label>
+                    <Select defaultValue="routine">
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="immediate">Immediate</SelectItem>
+                        <SelectItem value="urgent">Urgent (within 1 hour)</SelectItem>
+                        <SelectItem value="priority">Priority (within 4 hours)</SelectItem>
+                        <SelectItem value="routine">Routine</SelectItem>
+                        <SelectItem value="resolved">Resolved - No follow-up needed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <div className="flex items-start space-x-2">
+                    <AlertTriangle className="w-4 h-4 text-yellow-600 mt-0.5" />
+                    <div className="text-sm text-yellow-800">
+                      <p className="font-medium">Important Notice</p>
+                      <p>Acknowledging this alert confirms you have reviewed the patient's condition and taken appropriate clinical action. This will be permanently documented in the medical record.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-2 mt-6">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setAcknowledgeAlertDialog(null)}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || !acknowledgeReason || !acknowledgeAction.trim()}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {isSubmitting ? "Acknowledging..." : "Acknowledge Alert"}
+                </Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }
