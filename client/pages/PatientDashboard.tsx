@@ -408,7 +408,12 @@ export default function PatientDashboard() {
                           <div className="text-xs text-gray-600">Consents</div>
                         </div>
                       </div>
-                      <Button className="w-full" variant="outline" size="sm">
+                      <Button
+                        className="w-full"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setEpisodeDetailsDialog(episode)}
+                      >
                         <Eye className="w-4 h-4 mr-2" />
                         View Details
                       </Button>
