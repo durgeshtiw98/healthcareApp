@@ -513,15 +513,33 @@ export default function ClinicianDashboard() {
                         </p>
                       </div>
                       <div className="flex space-x-2">
-                        <Button size="sm" className="flex-1">
+                        <Button
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => setViewEpisodeDialog(episode)}
+                        >
                           <Eye className="w-3 h-3 mr-1" />
                           View
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setEditingEpisode(episode);
+                            setEditEpisodeDialog(episode);
+                          }}
+                        >
                           <Edit className="w-3 h-3 mr-1" />
                           Edit
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setNoteEpisodeDialog(episode);
+                            setNewNote("");
+                          }}
+                        >
                           <MessageSquare className="w-3 h-3 mr-1" />
                           Note
                         </Button>
