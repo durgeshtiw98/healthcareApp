@@ -88,6 +88,68 @@ interface Consent {
   permissions: string[];
 }
 
+interface PermissionTemplate {
+  id: string;
+  name: string;
+  description: string;
+  permissions: string[];
+}
+
+const availablePermissions = [
+  "vitals",
+  "allergies",
+  "current_medications",
+  "medical_history",
+  "full_episode_access",
+  "read_write_notes",
+  "order_labs",
+  "prescribe_medications",
+  "read_orders",
+  "write_results",
+  "upload_reports",
+  "read_vitals",
+  "read_appointments",
+  "emergency_notifications",
+  "view_lab_results",
+  "modify_treatment_plan",
+  "discharge_planning",
+  "billing_access",
+  "insurance_verification"
+];
+
+const permissionTemplates: PermissionTemplate[] = [
+  {
+    id: "emergency",
+    name: "Emergency Access",
+    description: "Essential permissions for emergency situations",
+    permissions: ["vitals", "allergies", "current_medications", "medical_history"]
+  },
+  {
+    id: "treating_physician",
+    name: "Treating Physician",
+    description: "Full access for primary care providers",
+    permissions: ["full_episode_access", "read_write_notes", "order_labs", "prescribe_medications", "modify_treatment_plan"]
+  },
+  {
+    id: "specialist",
+    name: "Specialist Consultation",
+    description: "Limited access for specialist consultations",
+    permissions: ["read_vitals", "view_lab_results", "read_write_notes", "order_labs"]
+  },
+  {
+    id: "family_member",
+    name: "Family/Caregiver",
+    description: "Basic monitoring access for family members",
+    permissions: ["read_vitals", "read_appointments", "emergency_notifications"]
+  },
+  {
+    id: "lab_technician",
+    name: "Laboratory",
+    description: "Lab-specific permissions",
+    permissions: ["read_orders", "write_results", "upload_reports"]
+  }
+];
+
 export default function PatientDashboard() {
   const [selectedEpisode, setSelectedEpisode] = useState<string | null>(null);
   const [episodeDetailsDialog, setEpisodeDetailsDialog] = useState<Episode | null>(null);
