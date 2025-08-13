@@ -575,21 +575,21 @@ export default function ClinicianDashboard() {
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="font-medium text-gray-900">Heart Rate Threshold</p>
-                        <p className="text-sm text-gray-600">Alert if > 100 BPM</p>
+                        <p className="text-sm text-gray-600">Alert if &gt; 100 BPM</p>
                       </div>
                       <Badge className="bg-green-100 text-green-800">Active</Badge>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="font-medium text-gray-900">BP Critical Range</p>
-                        <p className="text-sm text-gray-600">Alert if > 140/90</p>
+                        <p className="text-sm text-gray-600">Alert if &gt; 140/90</p>
                       </div>
                       <Badge className="bg-green-100 text-green-800">Active</Badge>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="font-medium text-gray-900">O2 Saturation</p>
-                        <p className="text-sm text-gray-600">Alert if < 95%</p>
+                        <p className="text-sm text-gray-600">Alert if &lt; 95%</p>
                       </div>
                       <Badge className="bg-green-100 text-green-800">Active</Badge>
                     </div>
