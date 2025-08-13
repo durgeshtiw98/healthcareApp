@@ -80,6 +80,15 @@ interface Alert {
   message: string;
   time: string;
   acknowledged: boolean;
+  severity: string;
+  category: string;
+  location: string;
+  mrn: string;
+  currentValues: Record<string, string>;
+  normalRanges: Record<string, string>;
+  recommendations: string[];
+  triggeredBy: string;
+  relatedEpisode: string;
 }
 
 export default function ClinicianDashboard() {
