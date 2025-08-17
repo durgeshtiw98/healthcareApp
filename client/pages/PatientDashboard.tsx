@@ -1772,7 +1772,7 @@ export default function PatientDashboard() {
                             {med.instructions}
                           </p>
                         </div>
-                        <div>
+                        <div className="mb-4">
                           <label className="text-xs font-medium text-gray-600">
                             Potential Side Effects
                           </label>
@@ -1788,6 +1788,83 @@ export default function PatientDashboard() {
                             ))}
                           </div>
                         </div>
+
+                        {/* Medication Reminder Controls - Only for Active medications */}
+                        {med.status === "Active" && (
+                          <div className="pt-3 border-t border-gray-200">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex items-center space-x-2">
+                                <Bell className="w-4 h-4 text-gray-500" />
+                                <label className="text-sm font-medium text-gray-700">
+                                  Medication Reminders
+                                </label>
+                              </div>
+                              <Switch
+                                checked={medicationReminders.find(r =>
+                                  r.medicationName === `${med.name} ${med.strength}`
+                                )?.enabled || false}
+                                onCheckedChange={(enabled) => {
+                                  const medicationId = `${med.name.toLowerCase()}-${med.strength.toLowerCase()}`;
+                                  if (enabled && !notificationPermission.granted) {
+                                    requestNotificationPermission().then(() => {
+                                      if (notificationPermission.granted) {
+                                        toggleMedicationReminder(medicationId, enabled);
+                                      }
+                                    });
+                                  } else {
+                                    toggleMedicationReminder(medicationId, enabled);
+                                  }
+                                }}
+                                disabled={!notificationPermission.granted}
+                              />
+                            </div>
+
+                            {(() => {
+                              const reminder = medicationReminders.find(r =>
+                                r.medicationName === `${med.name} ${med.strength}`
+                              );
+                              return reminder?.enabled && (
+                                <div className="space-y-2">
+                                  <div className="flex items-center justify-between text-sm">
+                                    <span className="text-gray-600">Reminder times:</span>
+                                    <div className="flex space-x-1">
+                                      {reminder.times.map((time, i) => (
+                                        <Badge key={i} variant="outline" className="text-xs">
+                                          {time}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center justify-between text-sm">
+                                    <span className="text-gray-600">Streak:</span>
+                                    <div className="flex items-center space-x-1">
+                                      <Badge className="bg-green-100 text-green-800 text-xs">
+                                        {reminder.streakCount} days
+                                      </Badge>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-6 px-2 text-xs"
+                                        onClick={() => {
+                                          const medicationId = `${med.name.toLowerCase()}-${med.strength.toLowerCase()}`;
+                                          markMedicationTaken(medicationId);
+                                        }}
+                                      >
+                                        <CheckCircle className="w-3 h-3 mr-1" />
+                                        Taken
+                                      </Button>
+                                    </div>
+                                  </div>
+                                  {reminder.lastTaken && (
+                                    <div className="text-xs text-gray-500">
+                                      Last taken: {reminder.lastTaken.toLocaleString()}
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   ))}
