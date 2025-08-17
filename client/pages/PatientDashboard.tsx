@@ -824,43 +824,485 @@ export default function PatientDashboard() {
 
           {/* Insights Tab */}
           <TabsContent value="insights" className="space-y-6">
+            {/* Overall Health Summary */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold text-health-primary">2</div>
+                  <div className="text-sm text-gray-600">Total Episodes</div>
+                  <div className="text-xs text-green-600 mt-1">1 Active</div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold text-green-600">87%</div>
+                  <div className="text-sm text-gray-600">Overall Adherence</div>
+                  <div className="text-xs text-green-600 mt-1">↑ 12% this month</div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold text-blue-600">6.9%</div>
+                  <div className="text-sm text-gray-600">Latest HbA1c</div>
+                  <div className="text-xs text-green-600 mt-1">↓ 15% improved</div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <div className="text-2xl font-bold text-purple-600">94</div>
+                  <div className="text-sm text-gray-600">Health Score</div>
+                  <div className="text-xs text-green-600 mt-1">Excellent</div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Cross-Episode Health Trends */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Multi-Episode HbA1c Trends */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <TrendingUp className="w-5 h-5 mr-2 text-health-primary" />
+                    HbA1c Trends Across Episodes
+                  </CardTitle>
+                  <CardDescription>
+                    Diabetes management progress over all episodes
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={[
+                        { period: 'Baseline', diabetes: 8.5, hypertension: null },
+                        { period: 'Month 1', diabetes: 8.2, hypertension: null },
+                        { period: 'Month 2', diabetes: 7.8, hypertension: null },
+                        { period: 'Month 3', diabetes: 7.4, hypertension: null },
+                        { period: 'Month 4', diabetes: 7.1, hypertension: null },
+                        { period: 'Month 5', diabetes: 6.9, hypertension: 140 },
+                        { period: 'Month 6', diabetes: 6.9, hypertension: 135 },
+                        { period: 'Month 7', diabetes: 6.8, hypertension: 128 }
+                      ]}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
+                        <XAxis dataKey="period" stroke="#6b7280" fontSize={11} />
+                        <YAxis yAxisId="left" stroke="#6b7280" fontSize={11} domain={[6, 9]} />
+                        <YAxis yAxisId="right" orientation="right" stroke="#6b7280" fontSize={11} domain={[120, 150]} />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "white",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "8px"
+                          }}
+                        />
+                        <Legend />
+                        <Line
+                          yAxisId="left"
+                          type="monotone"
+                          dataKey="diabetes"
+                          stroke="#8b5cf6"
+                          strokeWidth={3}
+                          dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 5 }}
+                          name="HbA1c % (Diabetes Episode)"
+                        />
+                        <Line
+                          yAxisId="right"
+                          type="monotone"
+                          dataKey="hypertension"
+                          stroke="#ef4444"
+                          strokeWidth={3}
+                          dot={{ fill: "#ef4444", strokeWidth: 2, r: 5 }}
+                          name="Systolic BP (Hypertension Episode)"
+                        />
+                        <ReferenceLine yAxisId="left" y={7.0} stroke="#10b981" strokeDasharray="5 5" label="HbA1c Target" />
+                        <ReferenceLine yAxisId="right" y={130} stroke="#10b981" strokeDasharray="5 5" label="BP Target" />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Episode Comparison Dashboard */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChart className="w-5 h-5 mr-2 text-health-primary" />
+                    Episode Performance Comparison
+                  </CardTitle>
+                  <CardDescription>
+                    Treatment effectiveness across all episodes
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        data={[
+                          {
+                            episode: 'Diabetes Mgmt',
+                            adherence: 95,
+                            improvement: 85,
+                            satisfaction: 90
+                          },
+                          {
+                            episode: 'Hypertension',
+                            adherence: 88,
+                            improvement: 75,
+                            satisfaction: 85
+                          },
+                          {
+                            episode: 'Annual Physical',
+                            adherence: 100,
+                            improvement: 95,
+                            satisfaction: 100
+                          }
+                        ]}
+                        margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                          dataKey="episode"
+                          angle={-45}
+                          textAnchor="end"
+                          height={80}
+                          fontSize={11}
+                        />
+                        <YAxis domain={[0, 100]} />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "white",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "8px"
+                          }}
+                          formatter={(value) => [value + '%', '']}
+                        />
+                        <Legend />
+                        <Bar dataKey="adherence" fill="#10b981" name="Treatment Adherence" />
+                        <Bar dataKey="improvement" fill="#3b82f6" name="Health Improvement" />
+                        <Bar dataKey="satisfaction" fill="#8b5cf6" name="Patient Satisfaction" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Comprehensive Health Analytics */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Overall Risk Assessment */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Shield className="w-5 h-5 mr-2 text-health-primary" />
+                    Comprehensive Risk Profile
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadialBarChart
+                        cx="50%"
+                        cy="50%"
+                        innerRadius="20%"
+                        outerRadius="90%"
+                        data={[
+                          { risk: 'Cardiovascular', value: 8, fill: '#10b981' },
+                          { risk: 'Diabetic Complications', value: 25, fill: '#f59e0b' },
+                          { risk: 'Medication Interactions', value: 2, fill: '#3b82f6' },
+                          { risk: 'Lifestyle Factors', value: 15, fill: '#8b5cf6' }
+                        ]}
+                        startAngle={90}
+                        endAngle={-270}
+                      >
+                        <RadialBar dataKey="value" cornerRadius={4} />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "white",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "8px"
+                          }}
+                          formatter={(value) => [value + '% risk', '']}
+                        />
+                        <Legend
+                          iconSize={8}
+                          layout="vertical"
+                          verticalAlign="middle"
+                          align="right"
+                          wrapperStyle={{ fontSize: "10px", paddingLeft: "10px" }}
+                        />
+                      </RadialBarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Medication Adherence Trends */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Pill className="w-5 h-5 mr-2 text-health-primary" />
+                    Medication Adherence Trends
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={[
+                        { week: 'W1', metformin: 95, lisinopril: 100 },
+                        { week: 'W2', metformin: 90, lisinopril: 95 },
+                        { week: 'W3', metformin: 98, lisinopril: 100 },
+                        { week: 'W4', metformin: 92, lisinopril: 90 },
+                        { week: 'W5', metformin: 96, lisinopril: 98 },
+                        { week: 'W6', metformin: 99, lisinopril: 100 }
+                      ]}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                        <XAxis dataKey="week" stroke="#6b7280" fontSize={11} />
+                        <YAxis domain={[80, 100]} stroke="#6b7280" fontSize={11} />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "white",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "8px"
+                          }}
+                          formatter={(value) => [value + '%', '']}
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="metformin"
+                          stackId="1"
+                          stroke="#8b5cf6"
+                          fill="#8b5cf620"
+                          name="Metformin"
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="lisinopril"
+                          stackId="2"
+                          stroke="#10b981"
+                          fill="#10b98120"
+                          name="Lisinopril"
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Health Score Evolution */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Activity className="w-5 h-5 mr-2 text-health-primary" />
+                    Health Score Evolution
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={[
+                        { month: 'Jan', overall: 65, diabetes: 60, hypertension: null },
+                        { month: 'Feb', overall: 72, diabetes: 68, hypertension: null },
+                        { month: 'Mar', overall: 78, diabetes: 75, hypertension: 70 },
+                        { month: 'Apr', overall: 83, diabetes: 80, hypertension: 78 },
+                        { month: 'May', overall: 87, diabetes: 85, hypertension: 82 },
+                        { month: 'Jun', overall: 91, diabetes: 88, hypertension: 85 }
+                      ]}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
+                        <XAxis dataKey="month" stroke="#6b7280" fontSize={11} />
+                        <YAxis domain={[50, 100]} stroke="#6b7280" fontSize={11} />
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "white",
+                            border: "1px solid #e5e7eb",
+                            borderRadius: "8px"
+                          }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="overall"
+                          stroke="#8b5cf6"
+                          strokeWidth={3}
+                          dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 4 }}
+                          name="Overall Score"
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="diabetes"
+                          stroke="#10b981"
+                          strokeWidth={2}
+                          dot={{ fill: "#10b981", strokeWidth: 2, r: 3 }}
+                          name="Diabetes Score"
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="hypertension"
+                          stroke="#3b82f6"
+                          strokeWidth={2}
+                          dot={{ fill: "#3b82f6", strokeWidth: 2, r: 3 }}
+                          name="Hypertension Score"
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* AI-Powered Cross-Episode Insights */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <TrendingUp className="w-5 h-5 mr-2 text-health-primary" />
-                  Health Insights
+                  <CheckCircle className="w-5 h-5 mr-2 text-health-primary" />
+                  AI-Powered Cross-Episode Health Analysis
                 </CardTitle>
                 <CardDescription>
-                  AI-powered health analysis and recommendations
+                  Comprehensive insights across all your healthcare episodes
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                    <TestTube className="w-5 h-5 text-blue-600 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-blue-900">Lab Work Due</p>
-                      <p className="text-sm text-blue-700">
-                        Schedule your quarterly HbA1c test
-                      </p>
-                      <p className="text-xs text-blue-600 mt-1">
-                        Due in 2 weeks
-                      </p>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Key Insights */}
+                  <div className="space-y-4">
+                    <div className="flex items-start space-x-3 p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <TrendingUp className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-green-900 mb-1">Excellent Multi-Episode Progress</p>
+                        <p className="text-sm text-green-700 mb-2">
+                          Your diabetes management shows 85% improvement while maintaining excellent hypertension control.
+                        </p>
+                        <div className="flex items-center space-x-4 text-xs text-green-600">
+                          <span>• HbA1c: 8.5% → 6.9%</span>
+                          <span>• BP: 145/90 → 128/82</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Pill className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-blue-900 mb-1">Medication Synergy Detected</p>
+                        <p className="text-sm text-blue-700 mb-2">
+                          Metformin and Lisinopril combination showing optimal results across both episodes.
+                        </p>
+                        <div className="text-xs text-blue-600">
+                          Combined effectiveness: 94% | No adverse interactions
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-3 p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+                      <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Activity className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-purple-900 mb-1">Lifestyle Impact Analysis</p>
+                        <p className="text-sm text-purple-700 mb-2">
+                          Consistent exercise and diet adherence correlating with 78% faster improvement rates.
+                        </p>
+                        <div className="text-xs text-purple-600">
+                          Recommended: Continue current lifestyle modifications
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
-                    <TrendingUp className="w-5 h-5 text-green-600 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-green-900">
-                        Great Progress!
-                      </p>
-                      <p className="text-sm text-green-700">
-                        Your glucose levels are trending well
-                      </p>
-                      <p className="text-xs text-green-600 mt-1">
-                        15% improvement over 3 months
-                      </p>
+                  {/* Predictive Timeline */}
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-3">Predictive Health Timeline</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                          3M
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">Optimal Diabetes Control Expected</p>
+                          <p className="text-sm text-gray-600">HbA1c projected to reach 6.5% (ideal range)</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                          6M
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">Cardiovascular Risk Minimization</p>
+                          <p className="text-sm text-gray-600">Risk score projected to drop below 5%</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                          12M
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900">Complete Episode Integration</p>
+                          <p className="text-sm text-gray-600">Unified care plan optimization across all conditions</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 p-3 bg-health-primary/5 rounded-lg border border-health-primary/20">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Shield className="w-4 h-4 text-health-primary" />
+                        <span className="font-medium text-health-primary">Overall Health Score Prediction</span>
+                      </div>
+                      <div className="text-2xl font-bold text-health-primary">96/100</div>
+                      <div className="text-sm text-gray-600">Projected score in 12 months</div>
+                      <div className="text-xs text-health-primary mt-1">+22 points from current baseline</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Next Actions & Recommendations */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Calendar className="w-5 h-5 mr-2 text-health-primary" />
+                  Upcoming Actions & Recommendations
+                </CardTitle>
+                <CardDescription>
+                  Cross-episode coordinated care plan
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <TestTube className="w-5 h-5 text-blue-600" />
+                      <span className="font-medium text-blue-900">Lab Work Due</span>
+                    </div>
+                    <p className="text-sm text-blue-700 mb-2">Quarterly HbA1c and lipid panel</p>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-blue-600">Due: Feb 15, 2024</span>
+                      <Badge className="bg-blue-100 text-blue-800">High Priority</Badge>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Heart className="w-5 h-5 text-green-600" />
+                      <span className="font-medium text-green-900">Lifestyle Optimization</span>
+                    </div>
+                    <p className="text-sm text-green-700 mb-2">Continue current diet and exercise plan</p>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-green-600">Ongoing</span>
+                      <Badge className="bg-green-100 text-green-800">On Track</Badge>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Eye className="w-5 h-5 text-purple-600" />
+                      <span className="font-medium text-purple-900">Eye Examination</span>
+                    </div>
+                    <p className="text-sm text-purple-700 mb-2">Annual diabetic retinal screening</p>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-purple-600">Due: Mar 1, 2024</span>
+                      <Badge className="bg-purple-100 text-purple-800">Scheduled</Badge>
                     </div>
                   </div>
                 </div>
