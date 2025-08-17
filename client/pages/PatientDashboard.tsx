@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import {
   Activity,
   Calendar,
@@ -37,6 +38,8 @@ import {
   Heart,
   Shield,
   Bell,
+  BellOff,
+  BellRing,
   Download,
   Share,
   Plus,
@@ -54,6 +57,8 @@ import {
   Edit,
   UserCheck,
   X,
+  Settings,
+  Smartphone,
 } from "lucide-react";
 
 interface Episode {
