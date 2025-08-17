@@ -338,6 +338,101 @@ export default function PatientDashboard() {
     }
   };
 
+  // Notification helper functions
+  const requestNotificationPermission = async () => {
+    if (!("Notification" in window)) {
+      alert("This browser does not support desktop notifications");
+      return;
+    }
+
+    if (Notification.permission === "granted") {
+      setNotificationPermission({ granted: true, requested: true });
+      return;
+    }
+
+    if (Notification.permission !== "denied") {
+      const permission = await Notification.requestPermission();
+      setNotificationPermission({
+        granted: permission === "granted",
+        requested: true
+      });
+    }
+  };
+
+  const scheduleNotification = (medicationName: string, time: string) => {
+    if (!notificationPermission.granted) return;
+
+    const now = new Date();
+    const [hours, minutes] = time.split(':').map(Number);
+
+    const notificationTime = new Date();
+    notificationTime.setHours(hours, minutes, 0, 0);
+
+    // If the time has passed today, schedule for tomorrow
+    if (notificationTime <= now) {
+      notificationTime.setDate(notificationTime.getDate() + 1);
+    }
+
+    const timeUntilNotification = notificationTime.getTime() - now.getTime();
+
+    setTimeout(() => {
+      new Notification(`Medication Reminder`, {
+        body: `Time to take your ${medicationName}`,
+        icon: "/pill-icon.png",
+        badge: "/pill-badge.png",
+        tag: `medication-${medicationName}`,
+        requireInteraction: true,
+        actions: [
+          { action: "taken", title: "Mark as Taken" },
+          { action: "snooze", title: "Remind in 10 min" }
+        ]
+      });
+    }, timeUntilNotification);
+  };
+
+  const toggleMedicationReminder = (medicationId: string, enabled: boolean) => {
+    setMedicationReminders(prev =>
+      prev.map(reminder =>
+        reminder.medicationId === medicationId
+          ? { ...reminder, enabled }
+          : reminder
+      )
+    );
+
+    if (enabled && notificationPermission.granted) {
+      const medication = medicationReminders.find(m => m.medicationId === medicationId);
+      if (medication) {
+        medication.times.forEach(time => {
+          scheduleNotification(medication.medicationName, time);
+        });
+      }
+    }
+  };
+
+  const markMedicationTaken = (medicationId: string) => {
+    setMedicationReminders(prev =>
+      prev.map(reminder =>
+        reminder.medicationId === medicationId
+          ? {
+              ...reminder,
+              lastTaken: new Date(),
+              streakCount: reminder.streakCount + 1
+            }
+          : reminder
+      )
+    );
+  };
+
+  // Initialize notification permission check
+  useEffect(() => {
+    if ("Notification" in window) {
+      setNotificationPermission({
+        granted: Notification.permission === "granted",
+        requested: Notification.permission !== "default"
+      });
+    }
+  }, []);
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
