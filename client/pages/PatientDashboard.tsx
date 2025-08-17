@@ -1212,6 +1212,188 @@ export default function PatientDashboard() {
         </DialogContent>
       </Dialog>
 
+      {/* Notification Settings Dialog */}
+      <Dialog open={notificationSettingsDialog} onOpenChange={setNotificationSettingsDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <BellRing className="w-5 h-5 mr-2 text-health-primary" />
+              Medication Reminder Settings
+            </DialogTitle>
+            <DialogDescription>
+              Configure when and how you receive medication reminders
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6">
+            {/* Notification Permission Status */}
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    {notificationPermission.granted ? (
+                      <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                        <BellOff className="w-5 h-5 text-red-600" />
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-medium">
+                        Push Notifications {notificationPermission.granted ? "Enabled" : "Disabled"}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {notificationPermission.granted
+                          ? "You'll receive timely reminders for your medications"
+                          : "Enable notifications to receive medication reminders"
+                        }
+                      </p>
+                    </div>
+                  </div>
+                  {!notificationPermission.granted && (
+                    <Button onClick={requestNotificationPermission} size="sm">
+                      Enable
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Medication Reminders List */}
+            <div>
+              <h3 className="font-medium text-gray-900 mb-3">Your Medications</h3>
+              <div className="space-y-3">
+                {medicationReminders.map((reminder) => (
+                  <Card key={reminder.medicationId}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-medium text-gray-900">
+                              {reminder.medicationName}
+                            </h4>
+                            <Switch
+                              checked={reminder.enabled}
+                              onCheckedChange={(enabled) => {
+                                if (enabled && !notificationPermission.granted) {
+                                  requestNotificationPermission();
+                                } else {
+                                  toggleMedicationReminder(reminder.medicationId, enabled);
+                                }
+                              }}
+                              disabled={!notificationPermission.granted}
+                            />
+                          </div>
+
+                          {reminder.enabled && (
+                            <div className="space-y-2">
+                              <div>
+                                <label className="text-xs font-medium text-gray-600">Reminder Times</label>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {reminder.times.map((time, i) => (
+                                    <Badge key={i} variant="outline" className="text-xs">
+                                      {time}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between text-sm">
+                                <span className="text-gray-600">Current Streak:</span>
+                                <Badge className="bg-green-100 text-green-800">
+                                  {reminder.streakCount} days
+                                </Badge>
+                              </div>
+
+                              {reminder.lastTaken && (
+                                <div className="text-xs text-gray-500">
+                                  Last taken: {reminder.lastTaken.toLocaleDateString()} at {reminder.lastTaken.toLocaleTimeString()}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Notification Options */}
+            {notificationPermission.granted && (
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="font-medium text-gray-900 mb-3">Notification Options</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-sm">Sound Alerts</p>
+                        <p className="text-xs text-gray-600">Play sound with notifications</p>
+                      </div>
+                      <Switch defaultChecked />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-sm">Persistent Notifications</p>
+                        <p className="text-xs text-gray-600">Keep notifications until marked as taken</p>
+                      </div>
+                      <Switch defaultChecked />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-sm">Snooze Option</p>
+                        <p className="text-xs text-gray-600">Allow 10-minute snooze for reminders</p>
+                      </div>
+                      <Switch defaultChecked />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Tips */}
+            <Card className="bg-blue-50 border-blue-200">
+              <CardContent className="p-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Bell className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-blue-900 mb-1">Tips for Success</h4>
+                    <ul className="text-sm text-blue-700 space-y-1">
+                      <li>• Set reminder times that align with your daily routine</li>
+                      <li>• Keep medications in a visible location</li>
+                      <li>• Use the "Mark as Taken" feature to track your adherence</li>
+                      <li>• Maintain your streak for better health outcomes</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setNotificationSettingsDialog(false)}
+            >
+              Close
+            </Button>
+            <Button
+              className="bg-health-primary hover:bg-health-primary/90"
+              onClick={() => setNotificationSettingsDialog(false)}
+            >
+              Save Settings
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Comprehensive Episode Details Dialog */}
       <Dialog
         open={!!episodeDetailsDialog}
