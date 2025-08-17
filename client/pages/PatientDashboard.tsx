@@ -168,6 +168,20 @@ const permissionTemplates: PermissionTemplate[] = [
   },
 ];
 
+interface MedicationReminder {
+  medicationId: string;
+  medicationName: string;
+  enabled: boolean;
+  times: string[];
+  lastTaken?: Date;
+  streakCount: number;
+}
+
+interface NotificationPermission {
+  granted: boolean;
+  requested: boolean;
+}
+
 export default function PatientDashboard() {
   const [selectedEpisode, setSelectedEpisode] = useState<string | null>(null);
   const [episodeDetailsDialog, setEpisodeDetailsDialog] =
