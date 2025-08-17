@@ -219,27 +219,31 @@ export default function PatientDashboard() {
   });
 
   // Notification state management
-  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>({
-    granted: false,
-    requested: false
-  });
-  const [medicationReminders, setMedicationReminders] = useState<MedicationReminder[]>([
+  const [notificationPermission, setNotificationPermission] =
+    useState<NotificationPermission>({
+      granted: false,
+      requested: false,
+    });
+  const [medicationReminders, setMedicationReminders] = useState<
+    MedicationReminder[]
+  >([
     {
       medicationId: "metformin-1000mg",
       medicationName: "Metformin 1000mg",
       enabled: false,
       times: ["08:00", "20:00"],
-      streakCount: 5
+      streakCount: 5,
     },
     {
       medicationId: "lisinopril-10mg",
       medicationName: "Lisinopril 10mg",
       enabled: false,
       times: ["08:00"],
-      streakCount: 12
-    }
+      streakCount: 12,
+    },
   ]);
-  const [notificationSettingsDialog, setNotificationSettingsDialog] = useState(false);
+  const [notificationSettingsDialog, setNotificationSettingsDialog] =
+    useState(false);
 
   const episodes: Episode[] = [
     {
@@ -371,7 +375,7 @@ export default function PatientDashboard() {
       const permission = await Notification.requestPermission();
       setNotificationPermission({
         granted: permission === "granted",
-        requested: true
+        requested: true,
       });
     }
   };
@@ -380,7 +384,7 @@ export default function PatientDashboard() {
     if (!notificationPermission.granted) return;
 
     const now = new Date();
-    const [hours, minutes] = time.split(':').map(Number);
+    const [hours, minutes] = time.split(":").map(Number);
 
     const notificationTime = new Date();
     notificationTime.setHours(hours, minutes, 0, 0);
@@ -401,25 +405,27 @@ export default function PatientDashboard() {
         requireInteraction: true,
         actions: [
           { action: "taken", title: "Mark as Taken" },
-          { action: "snooze", title: "Remind in 10 min" }
-        ]
+          { action: "snooze", title: "Remind in 10 min" },
+        ],
       });
     }, timeUntilNotification);
   };
 
   const toggleMedicationReminder = (medicationId: string, enabled: boolean) => {
-    setMedicationReminders(prev =>
-      prev.map(reminder =>
+    setMedicationReminders((prev) =>
+      prev.map((reminder) =>
         reminder.medicationId === medicationId
           ? { ...reminder, enabled }
-          : reminder
-      )
+          : reminder,
+      ),
     );
 
     if (enabled && notificationPermission.granted) {
-      const medication = medicationReminders.find(m => m.medicationId === medicationId);
+      const medication = medicationReminders.find(
+        (m) => m.medicationId === medicationId,
+      );
       if (medication) {
-        medication.times.forEach(time => {
+        medication.times.forEach((time) => {
           scheduleNotification(medication.medicationName, time);
         });
       }
@@ -427,16 +433,16 @@ export default function PatientDashboard() {
   };
 
   const markMedicationTaken = (medicationId: string) => {
-    setMedicationReminders(prev =>
-      prev.map(reminder =>
+    setMedicationReminders((prev) =>
+      prev.map((reminder) =>
         reminder.medicationId === medicationId
           ? {
               ...reminder,
               lastTaken: new Date(),
-              streakCount: reminder.streakCount + 1
+              streakCount: reminder.streakCount + 1,
             }
-          : reminder
-      )
+          : reminder,
+      ),
     );
   };
 
@@ -445,7 +451,7 @@ export default function PatientDashboard() {
     if ("Notification" in window) {
       setNotificationPermission({
         granted: Notification.permission === "granted",
-        requested: Notification.permission !== "default"
+        requested: Notification.permission !== "default",
       });
     }
   }, []);
@@ -828,7 +834,9 @@ export default function PatientDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card>
                 <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-bold text-health-primary">2</div>
+                  <div className="text-2xl font-bold text-health-primary">
+                    2
+                  </div>
                   <div className="text-sm text-gray-600">Total Episodes</div>
                   <div className="text-xs text-green-600 mt-1">1 Active</div>
                 </CardContent>
@@ -837,14 +845,18 @@ export default function PatientDashboard() {
                 <CardContent className="p-4 text-center">
                   <div className="text-2xl font-bold text-green-600">87%</div>
                   <div className="text-sm text-gray-600">Overall Adherence</div>
-                  <div className="text-xs text-green-600 mt-1">↑ 12% this month</div>
+                  <div className="text-xs text-green-600 mt-1">
+                    ↑ 12% this month
+                  </div>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-4 text-center">
                   <div className="text-2xl font-bold text-blue-600">6.9%</div>
                   <div className="text-sm text-gray-600">Latest HbA1c</div>
-                  <div className="text-xs text-green-600 mt-1">↓ 15% improved</div>
+                  <div className="text-xs text-green-600 mt-1">
+                    ↓ 15% improved
+                  </div>
                 </CardContent>
               </Card>
               <Card>
@@ -872,25 +884,74 @@ export default function PatientDashboard() {
                 <CardContent>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={[
-                        { period: 'Baseline', diabetes: 8.5, hypertension: null },
-                        { period: 'Month 1', diabetes: 8.2, hypertension: null },
-                        { period: 'Month 2', diabetes: 7.8, hypertension: null },
-                        { period: 'Month 3', diabetes: 7.4, hypertension: null },
-                        { period: 'Month 4', diabetes: 7.1, hypertension: null },
-                        { period: 'Month 5', diabetes: 6.9, hypertension: 140 },
-                        { period: 'Month 6', diabetes: 6.9, hypertension: 135 },
-                        { period: 'Month 7', diabetes: 6.8, hypertension: 128 }
-                      ]}>
+                      <LineChart
+                        data={[
+                          {
+                            period: "Baseline",
+                            diabetes: 8.5,
+                            hypertension: null,
+                          },
+                          {
+                            period: "Month 1",
+                            diabetes: 8.2,
+                            hypertension: null,
+                          },
+                          {
+                            period: "Month 2",
+                            diabetes: 7.8,
+                            hypertension: null,
+                          },
+                          {
+                            period: "Month 3",
+                            diabetes: 7.4,
+                            hypertension: null,
+                          },
+                          {
+                            period: "Month 4",
+                            diabetes: 7.1,
+                            hypertension: null,
+                          },
+                          {
+                            period: "Month 5",
+                            diabetes: 6.9,
+                            hypertension: 140,
+                          },
+                          {
+                            period: "Month 6",
+                            diabetes: 6.9,
+                            hypertension: 135,
+                          },
+                          {
+                            period: "Month 7",
+                            diabetes: 6.8,
+                            hypertension: 128,
+                          },
+                        ]}
+                      >
                         <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
-                        <XAxis dataKey="period" stroke="#6b7280" fontSize={11} />
-                        <YAxis yAxisId="left" stroke="#6b7280" fontSize={11} domain={[6, 9]} />
-                        <YAxis yAxisId="right" orientation="right" stroke="#6b7280" fontSize={11} domain={[120, 150]} />
+                        <XAxis
+                          dataKey="period"
+                          stroke="#6b7280"
+                          fontSize={11}
+                        />
+                        <YAxis
+                          yAxisId="left"
+                          stroke="#6b7280"
+                          fontSize={11}
+                          domain={[6, 9]}
+                        />
+                        <YAxis
+                          yAxisId="right"
+                          orientation="right"
+                          stroke="#6b7280"
+                          fontSize={11}
+                          domain={[120, 150]}
+                        />
                         <Tooltip
                           contentStyle={{
                             backgroundColor: "white",
                             border: "1px solid #e5e7eb",
-                            borderRadius: "8px"
+                            borderRadius: "8px",
                           }}
                         />
                         <Legend />
@@ -912,8 +973,20 @@ export default function PatientDashboard() {
                           dot={{ fill: "#ef4444", strokeWidth: 2, r: 5 }}
                           name="Systolic BP (Hypertension Episode)"
                         />
-                        <ReferenceLine yAxisId="left" y={7.0} stroke="#10b981" strokeDasharray="5 5" label="HbA1c Target" />
-                        <ReferenceLine yAxisId="right" y={130} stroke="#10b981" strokeDasharray="5 5" label="BP Target" />
+                        <ReferenceLine
+                          yAxisId="left"
+                          y={7.0}
+                          stroke="#10b981"
+                          strokeDasharray="5 5"
+                          label="HbA1c Target"
+                        />
+                        <ReferenceLine
+                          yAxisId="right"
+                          y={130}
+                          stroke="#10b981"
+                          strokeDasharray="5 5"
+                          label="BP Target"
+                        />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
@@ -937,23 +1010,23 @@ export default function PatientDashboard() {
                       <BarChart
                         data={[
                           {
-                            episode: 'Diabetes Mgmt',
+                            episode: "Diabetes Mgmt",
                             adherence: 95,
                             improvement: 85,
-                            satisfaction: 90
+                            satisfaction: 90,
                           },
                           {
-                            episode: 'Hypertension',
+                            episode: "Hypertension",
                             adherence: 88,
                             improvement: 75,
-                            satisfaction: 85
+                            satisfaction: 85,
                           },
                           {
-                            episode: 'Annual Physical',
+                            episode: "Annual Physical",
                             adherence: 100,
                             improvement: 95,
-                            satisfaction: 100
-                          }
+                            satisfaction: 100,
+                          },
                         ]}
                         margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
                       >
@@ -970,14 +1043,26 @@ export default function PatientDashboard() {
                           contentStyle={{
                             backgroundColor: "white",
                             border: "1px solid #e5e7eb",
-                            borderRadius: "8px"
+                            borderRadius: "8px",
                           }}
-                          formatter={(value) => [value + '%', '']}
+                          formatter={(value) => [value + "%", ""]}
                         />
                         <Legend />
-                        <Bar dataKey="adherence" fill="#10b981" name="Treatment Adherence" />
-                        <Bar dataKey="improvement" fill="#3b82f6" name="Health Improvement" />
-                        <Bar dataKey="satisfaction" fill="#8b5cf6" name="Patient Satisfaction" />
+                        <Bar
+                          dataKey="adherence"
+                          fill="#10b981"
+                          name="Treatment Adherence"
+                        />
+                        <Bar
+                          dataKey="improvement"
+                          fill="#3b82f6"
+                          name="Health Improvement"
+                        />
+                        <Bar
+                          dataKey="satisfaction"
+                          fill="#8b5cf6"
+                          name="Patient Satisfaction"
+                        />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -1004,10 +1089,22 @@ export default function PatientDashboard() {
                         innerRadius="20%"
                         outerRadius="90%"
                         data={[
-                          { risk: 'Cardiovascular', value: 8, fill: '#10b981' },
-                          { risk: 'Diabetic Complications', value: 25, fill: '#f59e0b' },
-                          { risk: 'Medication Interactions', value: 2, fill: '#3b82f6' },
-                          { risk: 'Lifestyle Factors', value: 15, fill: '#8b5cf6' }
+                          { risk: "Cardiovascular", value: 8, fill: "#10b981" },
+                          {
+                            risk: "Diabetic Complications",
+                            value: 25,
+                            fill: "#f59e0b",
+                          },
+                          {
+                            risk: "Medication Interactions",
+                            value: 2,
+                            fill: "#3b82f6",
+                          },
+                          {
+                            risk: "Lifestyle Factors",
+                            value: 15,
+                            fill: "#8b5cf6",
+                          },
                         ]}
                         startAngle={90}
                         endAngle={-270}
@@ -1017,16 +1114,19 @@ export default function PatientDashboard() {
                           contentStyle={{
                             backgroundColor: "white",
                             border: "1px solid #e5e7eb",
-                            borderRadius: "8px"
+                            borderRadius: "8px",
                           }}
-                          formatter={(value) => [value + '% risk', '']}
+                          formatter={(value) => [value + "% risk", ""]}
                         />
                         <Legend
                           iconSize={8}
                           layout="vertical"
                           verticalAlign="middle"
                           align="right"
-                          wrapperStyle={{ fontSize: "10px", paddingLeft: "10px" }}
+                          wrapperStyle={{
+                            fontSize: "10px",
+                            paddingLeft: "10px",
+                          }}
                         />
                       </RadialBarChart>
                     </ResponsiveContainer>
@@ -1045,24 +1145,30 @@ export default function PatientDashboard() {
                 <CardContent>
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={[
-                        { week: 'W1', metformin: 95, lisinopril: 100 },
-                        { week: 'W2', metformin: 90, lisinopril: 95 },
-                        { week: 'W3', metformin: 98, lisinopril: 100 },
-                        { week: 'W4', metformin: 92, lisinopril: 90 },
-                        { week: 'W5', metformin: 96, lisinopril: 98 },
-                        { week: 'W6', metformin: 99, lisinopril: 100 }
-                      ]}>
+                      <AreaChart
+                        data={[
+                          { week: "W1", metformin: 95, lisinopril: 100 },
+                          { week: "W2", metformin: 90, lisinopril: 95 },
+                          { week: "W3", metformin: 98, lisinopril: 100 },
+                          { week: "W4", metformin: 92, lisinopril: 90 },
+                          { week: "W5", metformin: 96, lisinopril: 98 },
+                          { week: "W6", metformin: 99, lisinopril: 100 },
+                        ]}
+                      >
                         <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
                         <XAxis dataKey="week" stroke="#6b7280" fontSize={11} />
-                        <YAxis domain={[80, 100]} stroke="#6b7280" fontSize={11} />
+                        <YAxis
+                          domain={[80, 100]}
+                          stroke="#6b7280"
+                          fontSize={11}
+                        />
                         <Tooltip
                           contentStyle={{
                             backgroundColor: "white",
                             border: "1px solid #e5e7eb",
-                            borderRadius: "8px"
+                            borderRadius: "8px",
                           }}
-                          formatter={(value) => [value + '%', '']}
+                          formatter={(value) => [value + "%", ""]}
                         />
                         <Area
                           type="monotone"
@@ -1097,22 +1203,58 @@ export default function PatientDashboard() {
                 <CardContent>
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={[
-                        { month: 'Jan', overall: 65, diabetes: 60, hypertension: null },
-                        { month: 'Feb', overall: 72, diabetes: 68, hypertension: null },
-                        { month: 'Mar', overall: 78, diabetes: 75, hypertension: 70 },
-                        { month: 'Apr', overall: 83, diabetes: 80, hypertension: 78 },
-                        { month: 'May', overall: 87, diabetes: 85, hypertension: 82 },
-                        { month: 'Jun', overall: 91, diabetes: 88, hypertension: 85 }
-                      ]}>
+                      <LineChart
+                        data={[
+                          {
+                            month: "Jan",
+                            overall: 65,
+                            diabetes: 60,
+                            hypertension: null,
+                          },
+                          {
+                            month: "Feb",
+                            overall: 72,
+                            diabetes: 68,
+                            hypertension: null,
+                          },
+                          {
+                            month: "Mar",
+                            overall: 78,
+                            diabetes: 75,
+                            hypertension: 70,
+                          },
+                          {
+                            month: "Apr",
+                            overall: 83,
+                            diabetes: 80,
+                            hypertension: 78,
+                          },
+                          {
+                            month: "May",
+                            overall: 87,
+                            diabetes: 85,
+                            hypertension: 82,
+                          },
+                          {
+                            month: "Jun",
+                            overall: 91,
+                            diabetes: 88,
+                            hypertension: 85,
+                          },
+                        ]}
+                      >
                         <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
                         <XAxis dataKey="month" stroke="#6b7280" fontSize={11} />
-                        <YAxis domain={[50, 100]} stroke="#6b7280" fontSize={11} />
+                        <YAxis
+                          domain={[50, 100]}
+                          stroke="#6b7280"
+                          fontSize={11}
+                        />
                         <Tooltip
                           contentStyle={{
                             backgroundColor: "white",
                             border: "1px solid #e5e7eb",
-                            borderRadius: "8px"
+                            borderRadius: "8px",
                           }}
                         />
                         <Line
@@ -1166,9 +1308,12 @@ export default function PatientDashboard() {
                         <TrendingUp className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-green-900 mb-1">Excellent Multi-Episode Progress</p>
+                        <p className="font-medium text-green-900 mb-1">
+                          Excellent Multi-Episode Progress
+                        </p>
                         <p className="text-sm text-green-700 mb-2">
-                          Your diabetes management shows 85% improvement while maintaining excellent hypertension control.
+                          Your diabetes management shows 85% improvement while
+                          maintaining excellent hypertension control.
                         </p>
                         <div className="flex items-center space-x-4 text-xs text-green-600">
                           <span>• HbA1c: 8.5% → 6.9%</span>
@@ -1182,9 +1327,12 @@ export default function PatientDashboard() {
                         <Pill className="w-5 h-5 text-blue-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-blue-900 mb-1">Medication Synergy Detected</p>
+                        <p className="font-medium text-blue-900 mb-1">
+                          Medication Synergy Detected
+                        </p>
                         <p className="text-sm text-blue-700 mb-2">
-                          Metformin and Lisinopril combination showing optimal results across both episodes.
+                          Metformin and Lisinopril combination showing optimal
+                          results across both episodes.
                         </p>
                         <div className="text-xs text-blue-600">
                           Combined effectiveness: 94% | No adverse interactions
@@ -1197,9 +1345,12 @@ export default function PatientDashboard() {
                         <Activity className="w-5 h-5 text-purple-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-purple-900 mb-1">Lifestyle Impact Analysis</p>
+                        <p className="font-medium text-purple-900 mb-1">
+                          Lifestyle Impact Analysis
+                        </p>
                         <p className="text-sm text-purple-700 mb-2">
-                          Consistent exercise and diet adherence correlating with 78% faster improvement rates.
+                          Consistent exercise and diet adherence correlating
+                          with 78% faster improvement rates.
                         </p>
                         <div className="text-xs text-purple-600">
                           Recommended: Continue current lifestyle modifications
@@ -1210,15 +1361,21 @@ export default function PatientDashboard() {
 
                   {/* Predictive Timeline */}
                   <div>
-                    <h4 className="font-medium text-gray-900 mb-3">Predictive Health Timeline</h4>
+                    <h4 className="font-medium text-gray-900 mb-3">
+                      Predictive Health Timeline
+                    </h4>
                     <div className="space-y-3">
                       <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                         <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
                           3M
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">Optimal Diabetes Control Expected</p>
-                          <p className="text-sm text-gray-600">HbA1c projected to reach 6.5% (ideal range)</p>
+                          <p className="font-medium text-gray-900">
+                            Optimal Diabetes Control Expected
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            HbA1c projected to reach 6.5% (ideal range)
+                          </p>
                         </div>
                       </div>
 
@@ -1227,8 +1384,12 @@ export default function PatientDashboard() {
                           6M
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">Cardiovascular Risk Minimization</p>
-                          <p className="text-sm text-gray-600">Risk score projected to drop below 5%</p>
+                          <p className="font-medium text-gray-900">
+                            Cardiovascular Risk Minimization
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Risk score projected to drop below 5%
+                          </p>
                         </div>
                       </div>
 
@@ -1237,8 +1398,12 @@ export default function PatientDashboard() {
                           12M
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">Complete Episode Integration</p>
-                          <p className="text-sm text-gray-600">Unified care plan optimization across all conditions</p>
+                          <p className="font-medium text-gray-900">
+                            Complete Episode Integration
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Unified care plan optimization across all conditions
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -1246,11 +1411,19 @@ export default function PatientDashboard() {
                     <div className="mt-4 p-3 bg-health-primary/5 rounded-lg border border-health-primary/20">
                       <div className="flex items-center space-x-2 mb-2">
                         <Shield className="w-4 h-4 text-health-primary" />
-                        <span className="font-medium text-health-primary">Overall Health Score Prediction</span>
+                        <span className="font-medium text-health-primary">
+                          Overall Health Score Prediction
+                        </span>
                       </div>
-                      <div className="text-2xl font-bold text-health-primary">96/100</div>
-                      <div className="text-sm text-gray-600">Projected score in 12 months</div>
-                      <div className="text-xs text-health-primary mt-1">+22 points from current baseline</div>
+                      <div className="text-2xl font-bold text-health-primary">
+                        96/100
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        Projected score in 12 months
+                      </div>
+                      <div className="text-xs text-health-primary mt-1">
+                        +22 points from current baseline
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1273,36 +1446,54 @@ export default function PatientDashboard() {
                   <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="flex items-center space-x-2 mb-2">
                       <TestTube className="w-5 h-5 text-blue-600" />
-                      <span className="font-medium text-blue-900">Lab Work Due</span>
+                      <span className="font-medium text-blue-900">
+                        Lab Work Due
+                      </span>
                     </div>
-                    <p className="text-sm text-blue-700 mb-2">Quarterly HbA1c and lipid panel</p>
+                    <p className="text-sm text-blue-700 mb-2">
+                      Quarterly HbA1c and lipid panel
+                    </p>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-blue-600">Due: Feb 15, 2024</span>
-                      <Badge className="bg-blue-100 text-blue-800">High Priority</Badge>
+                      <Badge className="bg-blue-100 text-blue-800">
+                        High Priority
+                      </Badge>
                     </div>
                   </div>
 
                   <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                     <div className="flex items-center space-x-2 mb-2">
                       <Heart className="w-5 h-5 text-green-600" />
-                      <span className="font-medium text-green-900">Lifestyle Optimization</span>
+                      <span className="font-medium text-green-900">
+                        Lifestyle Optimization
+                      </span>
                     </div>
-                    <p className="text-sm text-green-700 mb-2">Continue current diet and exercise plan</p>
+                    <p className="text-sm text-green-700 mb-2">
+                      Continue current diet and exercise plan
+                    </p>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-green-600">Ongoing</span>
-                      <Badge className="bg-green-100 text-green-800">On Track</Badge>
+                      <Badge className="bg-green-100 text-green-800">
+                        On Track
+                      </Badge>
                     </div>
                   </div>
 
                   <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
                     <div className="flex items-center space-x-2 mb-2">
                       <Eye className="w-5 h-5 text-purple-600" />
-                      <span className="font-medium text-purple-900">Eye Examination</span>
+                      <span className="font-medium text-purple-900">
+                        Eye Examination
+                      </span>
                     </div>
-                    <p className="text-sm text-purple-700 mb-2">Annual diabetic retinal screening</p>
+                    <p className="text-sm text-purple-700 mb-2">
+                      Annual diabetic retinal screening
+                    </p>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-purple-600">Due: Mar 1, 2024</span>
-                      <Badge className="bg-purple-100 text-purple-800">Scheduled</Badge>
+                      <Badge className="bg-purple-100 text-purple-800">
+                        Scheduled
+                      </Badge>
                     </div>
                   </div>
                 </div>
@@ -1672,7 +1863,10 @@ export default function PatientDashboard() {
       </Dialog>
 
       {/* Notification Settings Dialog */}
-      <Dialog open={notificationSettingsDialog} onOpenChange={setNotificationSettingsDialog}>
+      <Dialog
+        open={notificationSettingsDialog}
+        onOpenChange={setNotificationSettingsDialog}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center">
@@ -1701,13 +1895,15 @@ export default function PatientDashboard() {
                     )}
                     <div>
                       <p className="font-medium">
-                        Push Notifications {notificationPermission.granted ? "Enabled" : "Disabled"}
+                        Push Notifications{" "}
+                        {notificationPermission.granted
+                          ? "Enabled"
+                          : "Disabled"}
                       </p>
                       <p className="text-sm text-gray-600">
                         {notificationPermission.granted
                           ? "You'll receive timely reminders for your medications"
-                          : "Enable notifications to receive medication reminders"
-                        }
+                          : "Enable notifications to receive medication reminders"}
                       </p>
                     </div>
                   </div>
@@ -1722,7 +1918,9 @@ export default function PatientDashboard() {
 
             {/* Medication Reminders List */}
             <div>
-              <h3 className="font-medium text-gray-900 mb-3">Your Medications</h3>
+              <h3 className="font-medium text-gray-900 mb-3">
+                Your Medications
+              </h3>
               <div className="space-y-3">
                 {medicationReminders.map((reminder) => (
                   <Card key={reminder.medicationId}>
@@ -1736,10 +1934,16 @@ export default function PatientDashboard() {
                             <Switch
                               checked={reminder.enabled}
                               onCheckedChange={(enabled) => {
-                                if (enabled && !notificationPermission.granted) {
+                                if (
+                                  enabled &&
+                                  !notificationPermission.granted
+                                ) {
                                   requestNotificationPermission();
                                 } else {
-                                  toggleMedicationReminder(reminder.medicationId, enabled);
+                                  toggleMedicationReminder(
+                                    reminder.medicationId,
+                                    enabled,
+                                  );
                                 }
                               }}
                               disabled={!notificationPermission.granted}
@@ -1749,10 +1953,16 @@ export default function PatientDashboard() {
                           {reminder.enabled && (
                             <div className="space-y-2">
                               <div>
-                                <label className="text-xs font-medium text-gray-600">Reminder Times</label>
+                                <label className="text-xs font-medium text-gray-600">
+                                  Reminder Times
+                                </label>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {reminder.times.map((time, i) => (
-                                    <Badge key={i} variant="outline" className="text-xs">
+                                    <Badge
+                                      key={i}
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
                                       {time}
                                     </Badge>
                                   ))}
@@ -1760,7 +1970,9 @@ export default function PatientDashboard() {
                               </div>
 
                               <div className="flex items-center justify-between text-sm">
-                                <span className="text-gray-600">Current Streak:</span>
+                                <span className="text-gray-600">
+                                  Current Streak:
+                                </span>
                                 <Badge className="bg-green-100 text-green-800">
                                   {reminder.streakCount} days
                                 </Badge>
@@ -1768,7 +1980,9 @@ export default function PatientDashboard() {
 
                               {reminder.lastTaken && (
                                 <div className="text-xs text-gray-500">
-                                  Last taken: {reminder.lastTaken.toLocaleDateString()} at {reminder.lastTaken.toLocaleTimeString()}
+                                  Last taken:{" "}
+                                  {reminder.lastTaken.toLocaleDateString()} at{" "}
+                                  {reminder.lastTaken.toLocaleTimeString()}
                                 </div>
                               )}
                             </div>
@@ -1785,20 +1999,28 @@ export default function PatientDashboard() {
             {notificationPermission.granted && (
               <Card>
                 <CardContent className="p-4">
-                  <h3 className="font-medium text-gray-900 mb-3">Notification Options</h3>
+                  <h3 className="font-medium text-gray-900 mb-3">
+                    Notification Options
+                  </h3>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-sm">Sound Alerts</p>
-                        <p className="text-xs text-gray-600">Play sound with notifications</p>
+                        <p className="text-xs text-gray-600">
+                          Play sound with notifications
+                        </p>
                       </div>
                       <Switch defaultChecked />
                     </div>
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-sm">Persistent Notifications</p>
-                        <p className="text-xs text-gray-600">Keep notifications until marked as taken</p>
+                        <p className="font-medium text-sm">
+                          Persistent Notifications
+                        </p>
+                        <p className="text-xs text-gray-600">
+                          Keep notifications until marked as taken
+                        </p>
                       </div>
                       <Switch defaultChecked />
                     </div>
@@ -1806,7 +2028,9 @@ export default function PatientDashboard() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-sm">Snooze Option</p>
-                        <p className="text-xs text-gray-600">Allow 10-minute snooze for reminders</p>
+                        <p className="text-xs text-gray-600">
+                          Allow 10-minute snooze for reminders
+                        </p>
                       </div>
                       <Switch defaultChecked />
                     </div>
@@ -1823,11 +2047,18 @@ export default function PatientDashboard() {
                     <Bell className="w-4 h-4 text-blue-600" />
                   </div>
                   <div>
-                    <h4 className="font-medium text-blue-900 mb-1">Tips for Success</h4>
+                    <h4 className="font-medium text-blue-900 mb-1">
+                      Tips for Success
+                    </h4>
                     <ul className="text-sm text-blue-700 space-y-1">
-                      <li>• Set reminder times that align with your daily routine</li>
+                      <li>
+                        • Set reminder times that align with your daily routine
+                      </li>
                       <li>• Keep medications in a visible location</li>
-                      <li>• Use the "Mark as Taken" feature to track your adherence</li>
+                      <li>
+                        • Use the "Mark as Taken" feature to track your
+                        adherence
+                      </li>
                       <li>• Maintain your streak for better health outcomes</li>
                     </ul>
                   </div>
@@ -2269,12 +2500,13 @@ export default function PatientDashboard() {
                       <div className="flex items-center space-x-3">
                         <BellRing className="w-5 h-5 text-health-primary" />
                         <div>
-                          <h3 className="font-semibold text-gray-900">Medication Reminders</h3>
+                          <h3 className="font-semibold text-gray-900">
+                            Medication Reminders
+                          </h3>
                           <p className="text-sm text-gray-600">
                             {notificationPermission.granted
                               ? "Push notifications enabled"
-                              : "Enable notifications to never miss your medications"
-                            }
+                              : "Enable notifications to never miss your medications"}
                           </p>
                         </div>
                       </div>
@@ -2441,19 +2673,32 @@ export default function PatientDashboard() {
                                 </label>
                               </div>
                               <Switch
-                                checked={medicationReminders.find(r =>
-                                  r.medicationName === `${med.name} ${med.strength}`
-                                )?.enabled || false}
+                                checked={
+                                  medicationReminders.find(
+                                    (r) =>
+                                      r.medicationName ===
+                                      `${med.name} ${med.strength}`,
+                                  )?.enabled || false
+                                }
                                 onCheckedChange={(enabled) => {
                                   const medicationId = `${med.name.toLowerCase()}-${med.strength.toLowerCase()}`;
-                                  if (enabled && !notificationPermission.granted) {
+                                  if (
+                                    enabled &&
+                                    !notificationPermission.granted
+                                  ) {
                                     requestNotificationPermission().then(() => {
                                       if (notificationPermission.granted) {
-                                        toggleMedicationReminder(medicationId, enabled);
+                                        toggleMedicationReminder(
+                                          medicationId,
+                                          enabled,
+                                        );
                                       }
                                     });
                                   } else {
-                                    toggleMedicationReminder(medicationId, enabled);
+                                    toggleMedicationReminder(
+                                      medicationId,
+                                      enabled,
+                                    );
                                   }
                                 }}
                                 disabled={!notificationPermission.granted}
@@ -2461,47 +2706,60 @@ export default function PatientDashboard() {
                             </div>
 
                             {(() => {
-                              const reminder = medicationReminders.find(r =>
-                                r.medicationName === `${med.name} ${med.strength}`
+                              const reminder = medicationReminders.find(
+                                (r) =>
+                                  r.medicationName ===
+                                  `${med.name} ${med.strength}`,
                               );
-                              return reminder?.enabled && (
-                                <div className="space-y-2">
-                                  <div className="flex items-center justify-between text-sm">
-                                    <span className="text-gray-600">Reminder times:</span>
-                                    <div className="flex space-x-1">
-                                      {reminder.times.map((time, i) => (
-                                        <Badge key={i} variant="outline" className="text-xs">
-                                          {time}
+                              return (
+                                reminder?.enabled && (
+                                  <div className="space-y-2">
+                                    <div className="flex items-center justify-between text-sm">
+                                      <span className="text-gray-600">
+                                        Reminder times:
+                                      </span>
+                                      <div className="flex space-x-1">
+                                        {reminder.times.map((time, i) => (
+                                          <Badge
+                                            key={i}
+                                            variant="outline"
+                                            className="text-xs"
+                                          >
+                                            {time}
+                                          </Badge>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center justify-between text-sm">
+                                      <span className="text-gray-600">
+                                        Streak:
+                                      </span>
+                                      <div className="flex items-center space-x-1">
+                                        <Badge className="bg-green-100 text-green-800 text-xs">
+                                          {reminder.streakCount} days
                                         </Badge>
-                                      ))}
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          className="h-6 px-2 text-xs"
+                                          onClick={() => {
+                                            const medicationId = `${med.name.toLowerCase()}-${med.strength.toLowerCase()}`;
+                                            markMedicationTaken(medicationId);
+                                          }}
+                                        >
+                                          <CheckCircle className="w-3 h-3 mr-1" />
+                                          Taken
+                                        </Button>
+                                      </div>
                                     </div>
+                                    {reminder.lastTaken && (
+                                      <div className="text-xs text-gray-500">
+                                        Last taken:{" "}
+                                        {reminder.lastTaken.toLocaleString()}
+                                      </div>
+                                    )}
                                   </div>
-                                  <div className="flex items-center justify-between text-sm">
-                                    <span className="text-gray-600">Streak:</span>
-                                    <div className="flex items-center space-x-1">
-                                      <Badge className="bg-green-100 text-green-800 text-xs">
-                                        {reminder.streakCount} days
-                                      </Badge>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="h-6 px-2 text-xs"
-                                        onClick={() => {
-                                          const medicationId = `${med.name.toLowerCase()}-${med.strength.toLowerCase()}`;
-                                          markMedicationTaken(medicationId);
-                                        }}
-                                      >
-                                        <CheckCircle className="w-3 h-3 mr-1" />
-                                        Taken
-                                      </Button>
-                                    </div>
-                                  </div>
-                                  {reminder.lastTaken && (
-                                    <div className="text-xs text-gray-500">
-                                      Last taken: {reminder.lastTaken.toLocaleString()}
-                                    </div>
-                                  )}
-                                </div>
+                                )
                               );
                             })()}
                           </div>
@@ -3055,43 +3313,76 @@ export default function PatientDashboard() {
                         <div className="space-y-4">
                           <div className="grid grid-cols-1 gap-4">
                             <div className="text-center p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                              <div className="text-3xl font-bold text-green-900 mb-1">87%</div>
-                              <div className="text-sm text-green-600 font-medium">Treatment Adherence</div>
-                              <div className="text-xs text-green-500 mt-1">↑ 12% from last month</div>
+                              <div className="text-3xl font-bold text-green-900 mb-1">
+                                87%
+                              </div>
+                              <div className="text-sm text-green-600 font-medium">
+                                Treatment Adherence
+                              </div>
+                              <div className="text-xs text-green-500 mt-1">
+                                ↑ 12% from last month
+                              </div>
                             </div>
                             <div className="text-center p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                              <div className="text-3xl font-bold text-blue-900 mb-1">15%</div>
-                              <div className="text-sm text-blue-600 font-medium">HbA1c Improvement</div>
-                              <div className="text-xs text-blue-500 mt-1">Since episode start</div>
+                              <div className="text-3xl font-bold text-blue-900 mb-1">
+                                15%
+                              </div>
+                              <div className="text-sm text-blue-600 font-medium">
+                                HbA1c Improvement
+                              </div>
+                              <div className="text-xs text-blue-500 mt-1">
+                                Since episode start
+                              </div>
                             </div>
                             <div className="text-center p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
-                              <div className="text-3xl font-bold text-purple-900 mb-1">6.9%</div>
-                              <div className="text-sm text-purple-600 font-medium">Current HbA1c</div>
-                              <div className="text-xs text-purple-500 mt-1">Target: &lt; 7.0%</div>
+                              <div className="text-3xl font-bold text-purple-900 mb-1">
+                                6.9%
+                              </div>
+                              <div className="text-sm text-purple-600 font-medium">
+                                Current HbA1c
+                              </div>
+                              <div className="text-xs text-purple-500 mt-1">
+                                Target: &lt; 7.0%
+                              </div>
                             </div>
                           </div>
                         </div>
 
                         {/* Progress Trend Chart */}
                         <div>
-                          <h4 className="font-medium text-gray-900 mb-3">HbA1c Trend Over Time</h4>
+                          <h4 className="font-medium text-gray-900 mb-3">
+                            HbA1c Trend Over Time
+                          </h4>
                           <div className="h-64">
                             <ResponsiveContainer width="100%" height="100%">
-                              <LineChart data={[
-                                { month: 'Jan', hba1c: 8.2, target: 7.0 },
-                                { month: 'Feb', hba1c: 7.8, target: 7.0 },
-                                { month: 'Mar', hba1c: 7.4, target: 7.0 },
-                                { month: 'Apr', hba1c: 7.1, target: 7.0 },
-                                { month: 'May', hba1c: 6.9, target: 7.0 }
-                              ]}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
-                                <XAxis dataKey="month" stroke="#6b7280" fontSize={12} />
-                                <YAxis stroke="#6b7280" fontSize={12} domain={[6, 9]} />
+                              <LineChart
+                                data={[
+                                  { month: "Jan", hba1c: 8.2, target: 7.0 },
+                                  { month: "Feb", hba1c: 7.8, target: 7.0 },
+                                  { month: "Mar", hba1c: 7.4, target: 7.0 },
+                                  { month: "Apr", hba1c: 7.1, target: 7.0 },
+                                  { month: "May", hba1c: 6.9, target: 7.0 },
+                                ]}
+                              >
+                                <CartesianGrid
+                                  strokeDasharray="3 3"
+                                  stroke="#e0e7ff"
+                                />
+                                <XAxis
+                                  dataKey="month"
+                                  stroke="#6b7280"
+                                  fontSize={12}
+                                />
+                                <YAxis
+                                  stroke="#6b7280"
+                                  fontSize={12}
+                                  domain={[6, 9]}
+                                />
                                 <Tooltip
                                   contentStyle={{
                                     backgroundColor: "white",
                                     border: "1px solid #e5e7eb",
-                                    borderRadius: "8px"
+                                    borderRadius: "8px",
                                   }}
                                 />
                                 <Line
@@ -3099,7 +3390,11 @@ export default function PatientDashboard() {
                                   dataKey="hba1c"
                                   stroke="#8b5cf6"
                                   strokeWidth={3}
-                                  dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 6 }}
+                                  dot={{
+                                    fill: "#8b5cf6",
+                                    strokeWidth: 2,
+                                    r: 6,
+                                  }}
                                   name="HbA1c %"
                                 />
                                 <Line
@@ -3138,10 +3433,26 @@ export default function PatientDashboard() {
                               innerRadius="20%"
                               outerRadius="80%"
                               data={[
-                                { name: 'Medications', value: 95, fill: '#10b981' },
-                                { name: 'Diet Plan', value: 82, fill: '#3b82f6' },
-                                { name: 'Exercise', value: 78, fill: '#f59e0b' },
-                                { name: 'Glucose Monitoring', value: 92, fill: '#8b5cf6' }
+                                {
+                                  name: "Medications",
+                                  value: 95,
+                                  fill: "#10b981",
+                                },
+                                {
+                                  name: "Diet Plan",
+                                  value: 82,
+                                  fill: "#3b82f6",
+                                },
+                                {
+                                  name: "Exercise",
+                                  value: 78,
+                                  fill: "#f59e0b",
+                                },
+                                {
+                                  name: "Glucose Monitoring",
+                                  value: 92,
+                                  fill: "#8b5cf6",
+                                },
                               ]}
                               startAngle={90}
                               endAngle={-270}
@@ -3151,7 +3462,7 @@ export default function PatientDashboard() {
                                 contentStyle={{
                                   backgroundColor: "white",
                                   border: "1px solid #e5e7eb",
-                                  borderRadius: "8px"
+                                  borderRadius: "8px",
                                 }}
                               />
                               <Legend
@@ -3159,7 +3470,10 @@ export default function PatientDashboard() {
                                 layout="vertical"
                                 verticalAlign="middle"
                                 align="right"
-                                wrapperStyle={{ fontSize: "12px", paddingLeft: "20px" }}
+                                wrapperStyle={{
+                                  fontSize: "12px",
+                                  paddingLeft: "20px",
+                                }}
                               />
                             </RadialBarChart>
                           </ResponsiveContainer>
@@ -3182,39 +3496,61 @@ export default function PatientDashboard() {
                               layout="horizontal"
                               data={[
                                 {
-                                  risk: 'Cardiovascular',
+                                  risk: "Cardiovascular",
                                   current: 8,
                                   target: 5,
-                                  status: 'Low'
+                                  status: "Low",
                                 },
                                 {
-                                  risk: 'Diabetic Complications',
+                                  risk: "Diabetic Complications",
                                   current: 25,
                                   target: 15,
-                                  status: 'Moderate'
+                                  status: "Moderate",
                                 },
                                 {
-                                  risk: 'Medication Interactions',
+                                  risk: "Medication Interactions",
                                   current: 0,
                                   target: 0,
-                                  status: 'None'
-                                }
+                                  status: "None",
+                                },
                               ]}
-                              margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
+                              margin={{
+                                top: 5,
+                                right: 30,
+                                left: 80,
+                                bottom: 5,
+                              }}
                             >
                               <CartesianGrid strokeDasharray="3 3" />
                               <XAxis type="number" domain={[0, 50]} />
-                              <YAxis dataKey="risk" type="category" fontSize={12} />
+                              <YAxis
+                                dataKey="risk"
+                                type="category"
+                                fontSize={12}
+                              />
                               <Tooltip
                                 contentStyle={{
                                   backgroundColor: "white",
                                   border: "1px solid #e5e7eb",
-                                  borderRadius: "8px"
+                                  borderRadius: "8px",
                                 }}
-                                formatter={(value, name) => [value + '%', name === 'current' ? 'Current Risk' : 'Target Risk']}
+                                formatter={(value, name) => [
+                                  value + "%",
+                                  name === "current"
+                                    ? "Current Risk"
+                                    : "Target Risk",
+                                ]}
                               />
-                              <Bar dataKey="current" fill="#f59e0b" name="Current Risk" />
-                              <Bar dataKey="target" fill="#10b981" name="Target Risk" />
+                              <Bar
+                                dataKey="current"
+                                fill="#f59e0b"
+                                name="Current Risk"
+                              />
+                              <Bar
+                                dataKey="target"
+                                fill="#10b981"
+                                name="Target Risk"
+                              />
                             </BarChart>
                           </ResponsiveContainer>
                         </div>
@@ -3237,9 +3573,12 @@ export default function PatientDashboard() {
                             <CheckCircle className="w-5 h-5 text-green-600" />
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-green-900 mb-1">Excellent Progress</p>
+                            <p className="font-medium text-green-900 mb-1">
+                              Excellent Progress
+                            </p>
                             <p className="text-sm text-green-700">
-                              Your HbA1c has improved by 15% since episode start. Continue current treatment plan.
+                              Your HbA1c has improved by 15% since episode
+                              start. Continue current treatment plan.
                             </p>
                             <div className="mt-2 flex items-center text-xs text-green-600">
                               <TrendingUp className="w-3 h-3 mr-1" />
@@ -3253,9 +3592,12 @@ export default function PatientDashboard() {
                             <TestTube className="w-5 h-5 text-blue-600" />
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-blue-900 mb-1">Upcoming Recommendations</p>
+                            <p className="font-medium text-blue-900 mb-1">
+                              Upcoming Recommendations
+                            </p>
                             <p className="text-sm text-blue-700">
-                              Consider scheduling lipid panel in 3 months to monitor cardiovascular risk factors.
+                              Consider scheduling lipid panel in 3 months to
+                              monitor cardiovascular risk factors.
                             </p>
                             <div className="mt-2 flex items-center text-xs text-blue-600">
                               <Clock className="w-3 h-3 mr-1" />
@@ -3269,9 +3611,12 @@ export default function PatientDashboard() {
                             <AlertTriangle className="w-5 h-5 text-yellow-600" />
                           </div>
                           <div className="flex-1">
-                            <p className="font-medium text-yellow-900 mb-1">Attention Needed</p>
+                            <p className="font-medium text-yellow-900 mb-1">
+                              Attention Needed
+                            </p>
                             <p className="text-sm text-yellow-700">
-                              Fasting glucose levels occasionally above target. Consider adjusting meal timing or medication.
+                              Fasting glucose levels occasionally above target.
+                              Consider adjusting meal timing or medication.
                             </p>
                             <div className="mt-2 flex items-center text-xs text-yellow-600">
                               <AlertTriangle className="w-3 h-3 mr-1" />
@@ -3298,22 +3643,65 @@ export default function PatientDashboard() {
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* HbA1c Projection */}
                         <div>
-                          <h4 className="font-medium text-gray-900 mb-3">6-Month HbA1c Projection</h4>
+                          <h4 className="font-medium text-gray-900 mb-3">
+                            6-Month HbA1c Projection
+                          </h4>
                           <div className="h-48">
                             <ResponsiveContainer width="100%" height="100%">
-                              <AreaChart data={[
-                                { month: 'Jan', actual: 8.2, projected: null },
-                                { month: 'Feb', actual: 7.8, projected: null },
-                                { month: 'Mar', actual: 7.4, projected: null },
-                                { month: 'Apr', actual: 7.1, projected: null },
-                                { month: 'May', actual: 6.9, projected: 6.9 },
-                                { month: 'Jun', actual: null, projected: 6.7 },
-                                { month: 'Jul', actual: null, projected: 6.5 },
-                                { month: 'Aug', actual: null, projected: 6.4 }
-                              ]}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
-                                <XAxis dataKey="month" stroke="#6b7280" fontSize={12} />
-                                <YAxis stroke="#6b7280" fontSize={12} domain={[6, 9]} />
+                              <AreaChart
+                                data={[
+                                  {
+                                    month: "Jan",
+                                    actual: 8.2,
+                                    projected: null,
+                                  },
+                                  {
+                                    month: "Feb",
+                                    actual: 7.8,
+                                    projected: null,
+                                  },
+                                  {
+                                    month: "Mar",
+                                    actual: 7.4,
+                                    projected: null,
+                                  },
+                                  {
+                                    month: "Apr",
+                                    actual: 7.1,
+                                    projected: null,
+                                  },
+                                  { month: "May", actual: 6.9, projected: 6.9 },
+                                  {
+                                    month: "Jun",
+                                    actual: null,
+                                    projected: 6.7,
+                                  },
+                                  {
+                                    month: "Jul",
+                                    actual: null,
+                                    projected: 6.5,
+                                  },
+                                  {
+                                    month: "Aug",
+                                    actual: null,
+                                    projected: 6.4,
+                                  },
+                                ]}
+                              >
+                                <CartesianGrid
+                                  strokeDasharray="3 3"
+                                  stroke="#e0e7ff"
+                                />
+                                <XAxis
+                                  dataKey="month"
+                                  stroke="#6b7280"
+                                  fontSize={12}
+                                />
+                                <YAxis
+                                  stroke="#6b7280"
+                                  fontSize={12}
+                                  domain={[6, 9]}
+                                />
                                 <Tooltip />
                                 <Area
                                   type="monotone"
@@ -3339,33 +3727,43 @@ export default function PatientDashboard() {
 
                         {/* Goal Achievement Probability */}
                         <div>
-                          <h4 className="font-medium text-gray-900 mb-3">Goal Achievement Probability</h4>
+                          <h4 className="font-medium text-gray-900 mb-3">
+                            Goal Achievement Probability
+                          </h4>
                           <div className="space-y-4">
                             <div className="space-y-2">
                               <div className="flex justify-between text-sm">
                                 <span>HbA1c &lt; 7.0%</span>
-                                <span className="font-medium text-green-600">85%</span>
+                                <span className="font-medium text-green-600">
+                                  85%
+                                </span>
                               </div>
                               <Progress value={85} className="h-2" />
                             </div>
                             <div className="space-y-2">
                               <div className="flex justify-between text-sm">
                                 <span>Weight Loss 5%</span>
-                                <span className="font-medium text-blue-600">72%</span>
+                                <span className="font-medium text-blue-600">
+                                  72%
+                                </span>
                               </div>
                               <Progress value={72} className="h-2" />
                             </div>
                             <div className="space-y-2">
                               <div className="flex justify-between text-sm">
                                 <span>Blood Pressure &lt;130/80</span>
-                                <span className="font-medium text-yellow-600">68%</span>
+                                <span className="font-medium text-yellow-600">
+                                  68%
+                                </span>
                               </div>
                               <Progress value={68} className="h-2" />
                             </div>
                             <div className="space-y-2">
                               <div className="flex justify-between text-sm">
                                 <span>Cholesterol &lt;100 mg/dL</span>
-                                <span className="font-medium text-orange-600">45%</span>
+                                <span className="font-medium text-orange-600">
+                                  45%
+                                </span>
                               </div>
                               <Progress value={45} className="h-2" />
                             </div>
@@ -3393,14 +3791,23 @@ export default function PatientDashboard() {
                             1
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900 mb-1">Continue Current Medication Regimen</h4>
+                            <h4 className="font-medium text-gray-900 mb-1">
+                              Continue Current Medication Regimen
+                            </h4>
                             <p className="text-sm text-gray-600 mb-2">
-                              Current diabetes medications are effective. Maintain current dosing.
+                              Current diabetes medications are effective.
+                              Maintain current dosing.
                             </p>
                             <div className="flex items-center space-x-4 text-xs">
-                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded">Impact: High</span>
-                              <span className="text-gray-500">Evidence Level: A</span>
-                              <span className="text-gray-500">Success Rate: 89%</span>
+                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded">
+                                Impact: High
+                              </span>
+                              <span className="text-gray-500">
+                                Evidence Level: A
+                              </span>
+                              <span className="text-gray-500">
+                                Success Rate: 89%
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -3410,14 +3817,23 @@ export default function PatientDashboard() {
                             2
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900 mb-1">Increase Physical Activity</h4>
+                            <h4 className="font-medium text-gray-900 mb-1">
+                              Increase Physical Activity
+                            </h4>
                             <p className="text-sm text-gray-600 mb-2">
-                              Add 15 minutes of walking daily to improve glucose control and cardiovascular health.
+                              Add 15 minutes of walking daily to improve glucose
+                              control and cardiovascular health.
                             </p>
                             <div className="flex items-center space-x-4 text-xs">
-                              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">Impact: Medium</span>
-                              <span className="text-gray-500">Evidence Level: A</span>
-                              <span className="text-gray-500">Projected HbA1c ↓ 0.3%</span>
+                              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                Impact: Medium
+                              </span>
+                              <span className="text-gray-500">
+                                Evidence Level: A
+                              </span>
+                              <span className="text-gray-500">
+                                Projected HbA1c ↓ 0.3%
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -3427,14 +3843,23 @@ export default function PatientDashboard() {
                             3
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900 mb-1">Enhanced Glucose Monitoring</h4>
+                            <h4 className="font-medium text-gray-900 mb-1">
+                              Enhanced Glucose Monitoring
+                            </h4>
                             <p className="text-sm text-gray-600 mb-2">
-                              Increase testing frequency to 3x daily during meal optimization phase.
+                              Increase testing frequency to 3x daily during meal
+                              optimization phase.
                             </p>
                             <div className="flex items-center space-x-4 text-xs">
-                              <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">Impact: Medium</span>
-                              <span className="text-gray-500">Evidence Level: B</span>
-                              <span className="text-gray-500">Duration: 4 weeks</span>
+                              <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                                Impact: Medium
+                              </span>
+                              <span className="text-gray-500">
+                                Evidence Level: B
+                              </span>
+                              <span className="text-gray-500">
+                                Duration: 4 weeks
+                              </span>
                             </div>
                           </div>
                         </div>
