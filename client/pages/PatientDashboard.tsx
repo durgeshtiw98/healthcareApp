@@ -1621,6 +1621,46 @@ export default function PatientDashboard() {
 
               {/* Medications Tab */}
               <TabsContent value="medications" className="space-y-6">
+                {/* Notification Settings Header */}
+                <Card className="mb-4">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <BellRing className="w-5 h-5 text-health-primary" />
+                        <div>
+                          <h3 className="font-semibold text-gray-900">Medication Reminders</h3>
+                          <p className="text-sm text-gray-600">
+                            {notificationPermission.granted
+                              ? "Push notifications enabled"
+                              : "Enable notifications to never miss your medications"
+                            }
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        {!notificationPermission.granted && (
+                          <Button
+                            onClick={requestNotificationPermission}
+                            size="sm"
+                            className="bg-health-primary hover:bg-health-primary/90"
+                          >
+                            <Smartphone className="w-4 h-4 mr-2" />
+                            Enable Notifications
+                          </Button>
+                        )}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setNotificationSettingsDialog(true)}
+                        >
+                          <Settings className="w-4 h-4 mr-2" />
+                          Settings
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 <div className="grid gap-4">
                   {[
                     {
