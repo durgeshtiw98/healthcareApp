@@ -201,6 +201,29 @@ export default function PatientDashboard() {
     customPermissions: [] as string[],
   });
 
+  // Notification state management
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>({
+    granted: false,
+    requested: false
+  });
+  const [medicationReminders, setMedicationReminders] = useState<MedicationReminder[]>([
+    {
+      medicationId: "metformin-1000mg",
+      medicationName: "Metformin 1000mg",
+      enabled: false,
+      times: ["08:00", "20:00"],
+      streakCount: 5
+    },
+    {
+      medicationId: "lisinopril-10mg",
+      medicationName: "Lisinopril 10mg",
+      enabled: false,
+      times: ["08:00"],
+      streakCount: 12
+    }
+  ]);
+  const [notificationSettingsDialog, setNotificationSettingsDialog] = useState(false);
+
   const episodes: Episode[] = [
     {
       id: "EP-2024-001",
