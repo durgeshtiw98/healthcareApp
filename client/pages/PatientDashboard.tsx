@@ -2582,6 +2582,7 @@ export default function PatientDashboard() {
               {/* Analysis Tab */}
               <TabsContent value="analysis" className="space-y-6">
                 <div className="grid gap-6">
+                  {/* Episode Progress Analysis with Charts */}
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center">
@@ -2590,177 +2591,392 @@ export default function PatientDashboard() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <div className="text-center p-3 bg-green-50 rounded">
-                          <div className="text-2xl font-bold text-green-900">
-                            87%
-                          </div>
-                          <div className="text-sm text-green-600">
-                            Treatment Adherence
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Progress Metrics Cards */}
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-1 gap-4">
+                            <div className="text-center p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                              <div className="text-3xl font-bold text-green-900 mb-1">87%</div>
+                              <div className="text-sm text-green-600 font-medium">Treatment Adherence</div>
+                              <div className="text-xs text-green-500 mt-1">↑ 12% from last month</div>
+                            </div>
+                            <div className="text-center p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                              <div className="text-3xl font-bold text-blue-900 mb-1">15%</div>
+                              <div className="text-sm text-blue-600 font-medium">HbA1c Improvement</div>
+                              <div className="text-xs text-blue-500 mt-1">Since episode start</div>
+                            </div>
+                            <div className="text-center p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500">
+                              <div className="text-3xl font-bold text-purple-900 mb-1">6.9%</div>
+                              <div className="text-sm text-purple-600 font-medium">Current HbA1c</div>
+                              <div className="text-xs text-purple-500 mt-1">Target: &lt; 7.0%</div>
+                            </div>
                           </div>
                         </div>
-                        <div className="text-center p-3 bg-blue-50 rounded">
-                          <div className="text-2xl font-bold text-blue-900">
-                            15%
-                          </div>
-                          <div className="text-sm text-blue-600">
-                            HbA1c Improvement
-                          </div>
-                        </div>
-                        <div className="text-center p-3 bg-purple-50 rounded">
-                          <div className="text-2xl font-bold text-purple-900">
-                            6.9%
-                          </div>
-                          <div className="text-sm text-purple-600">
-                            Current HbA1c
+
+                        {/* Progress Trend Chart */}
+                        <div>
+                          <h4 className="font-medium text-gray-900 mb-3">HbA1c Trend Over Time</h4>
+                          <div className="h-64">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <LineChart data={[
+                                { month: 'Jan', hba1c: 8.2, target: 7.0 },
+                                { month: 'Feb', hba1c: 7.8, target: 7.0 },
+                                { month: 'Mar', hba1c: 7.4, target: 7.0 },
+                                { month: 'Apr', hba1c: 7.1, target: 7.0 },
+                                { month: 'May', hba1c: 6.9, target: 7.0 }
+                              ]}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
+                                <XAxis dataKey="month" stroke="#6b7280" fontSize={12} />
+                                <YAxis stroke="#6b7280" fontSize={12} domain={[6, 9]} />
+                                <Tooltip
+                                  contentStyle={{
+                                    backgroundColor: "white",
+                                    border: "1px solid #e5e7eb",
+                                    borderRadius: "8px"
+                                  }}
+                                />
+                                <Line
+                                  type="monotone"
+                                  dataKey="hba1c"
+                                  stroke="#8b5cf6"
+                                  strokeWidth={3}
+                                  dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 6 }}
+                                  name="HbA1c %"
+                                />
+                                <Line
+                                  type="monotone"
+                                  dataKey="target"
+                                  stroke="#ef4444"
+                                  strokeWidth={2}
+                                  strokeDasharray="5 5"
+                                  dot={false}
+                                  name="Target"
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
                           </div>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
 
+                  {/* Health Metrics Dashboard */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Treatment Adherence Breakdown */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <Pill className="w-5 h-5 mr-2 text-health-primary" />
+                          Treatment Adherence Breakdown
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="h-64">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <RadialBarChart
+                              cx="50%"
+                              cy="50%"
+                              innerRadius="20%"
+                              outerRadius="80%"
+                              data={[
+                                { name: 'Medications', value: 95, fill: '#10b981' },
+                                { name: 'Diet Plan', value: 82, fill: '#3b82f6' },
+                                { name: 'Exercise', value: 78, fill: '#f59e0b' },
+                                { name: 'Glucose Monitoring', value: 92, fill: '#8b5cf6' }
+                              ]}
+                              startAngle={90}
+                              endAngle={-270}
+                            >
+                              <RadialBar dataKey="value" cornerRadius={4} />
+                              <Tooltip
+                                contentStyle={{
+                                  backgroundColor: "white",
+                                  border: "1px solid #e5e7eb",
+                                  borderRadius: "8px"
+                                }}
+                              />
+                              <Legend
+                                iconSize={8}
+                                layout="vertical"
+                                verticalAlign="middle"
+                                align="right"
+                                wrapperStyle={{ fontSize: "12px", paddingLeft: "20px" }}
+                              />
+                            </RadialBarChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Risk Assessment Visualization */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center">
+                          <Shield className="w-5 h-5 mr-2 text-health-primary" />
+                          Risk Assessment Overview
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="h-64">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                              layout="horizontal"
+                              data={[
+                                {
+                                  risk: 'Cardiovascular',
+                                  current: 8,
+                                  target: 5,
+                                  status: 'Low'
+                                },
+                                {
+                                  risk: 'Diabetic Complications',
+                                  current: 25,
+                                  target: 15,
+                                  status: 'Moderate'
+                                },
+                                {
+                                  risk: 'Medication Interactions',
+                                  current: 0,
+                                  target: 0,
+                                  status: 'None'
+                                }
+                              ]}
+                              margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis type="number" domain={[0, 50]} />
+                              <YAxis dataKey="risk" type="category" fontSize={12} />
+                              <Tooltip
+                                contentStyle={{
+                                  backgroundColor: "white",
+                                  border: "1px solid #e5e7eb",
+                                  borderRadius: "8px"
+                                }}
+                                formatter={(value, name) => [value + '%', name === 'current' ? 'Current Risk' : 'Target Risk']}
+                              />
+                              <Bar dataKey="current" fill="#f59e0b" name="Current Risk" />
+                              <Bar dataKey="target" fill="#10b981" name="Target Risk" />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* AI-Powered Health Insights */}
                   <Card>
                     <CardHeader>
-                      <CardTitle>AI-Powered Health Insights</CardTitle>
+                      <CardTitle className="flex items-center">
+                        <CheckCircle className="w-5 h-5 mr-2 text-health-primary" />
+                        AI-Powered Health Insights
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
-                          <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
-                          <div>
-                            <p className="font-medium text-green-900">
-                              Excellent Progress
-                            </p>
+                        <div className="flex items-start space-x-3 p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                          <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-green-900 mb-1">Excellent Progress</p>
                             <p className="text-sm text-green-700">
-                              Your HbA1c has improved by 15% since episode
-                              start. Continue current treatment plan.
+                              Your HbA1c has improved by 15% since episode start. Continue current treatment plan.
                             </p>
+                            <div className="mt-2 flex items-center text-xs text-green-600">
+                              <TrendingUp className="w-3 h-3 mr-1" />
+                              Confidence: 94% | Impact: High
+                            </div>
                           </div>
                         </div>
 
-                        <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                          <TestTube className="w-5 h-5 text-blue-600 mt-0.5" />
-                          <div>
-                            <p className="font-medium text-blue-900">
-                              Upcoming Recommendations
-                            </p>
+                        <div className="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <TestTube className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-blue-900 mb-1">Upcoming Recommendations</p>
                             <p className="text-sm text-blue-700">
-                              Consider scheduling lipid panel in 3 months to
-                              monitor cardiovascular risk factors.
+                              Consider scheduling lipid panel in 3 months to monitor cardiovascular risk factors.
                             </p>
+                            <div className="mt-2 flex items-center text-xs text-blue-600">
+                              <Clock className="w-3 h-3 mr-1" />
+                              Recommended by: Feb 15, 2024
+                            </div>
                           </div>
                         </div>
 
-                        <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
-                          <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
-                          <div>
-                            <p className="font-medium text-yellow-900">
-                              Attention Needed
-                            </p>
+                        <div className="flex items-start space-x-3 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+                          <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-yellow-900 mb-1">Attention Needed</p>
                             <p className="text-sm text-yellow-700">
-                              Fasting glucose levels occasionally above target.
-                              Consider adjusting meal timing or medication.
+                              Fasting glucose levels occasionally above target. Consider adjusting meal timing or medication.
                             </p>
+                            <div className="mt-2 flex items-center text-xs text-yellow-600">
+                              <AlertTriangle className="w-3 h-3 mr-1" />
+                              Priority: Medium | Action required within 2 weeks
+                            </div>
                           </div>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
 
+                  {/* Predictive Analytics */}
                   <Card>
                     <CardHeader>
-                      <CardTitle>Risk Assessment</CardTitle>
+                      <CardTitle className="flex items-center">
+                        <TrendingUp className="w-5 h-5 mr-2 text-health-primary" />
+                        Predictive Health Analytics
+                      </CardTitle>
+                      <CardDescription>
+                        AI-powered projections based on current trends
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* HbA1c Projection */}
+                        <div>
+                          <h4 className="font-medium text-gray-900 mb-3">6-Month HbA1c Projection</h4>
+                          <div className="h-48">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <AreaChart data={[
+                                { month: 'Jan', actual: 8.2, projected: null },
+                                { month: 'Feb', actual: 7.8, projected: null },
+                                { month: 'Mar', actual: 7.4, projected: null },
+                                { month: 'Apr', actual: 7.1, projected: null },
+                                { month: 'May', actual: 6.9, projected: 6.9 },
+                                { month: 'Jun', actual: null, projected: 6.7 },
+                                { month: 'Jul', actual: null, projected: 6.5 },
+                                { month: 'Aug', actual: null, projected: 6.4 }
+                              ]}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" />
+                                <XAxis dataKey="month" stroke="#6b7280" fontSize={12} />
+                                <YAxis stroke="#6b7280" fontSize={12} domain={[6, 9]} />
+                                <Tooltip />
+                                <Area
+                                  type="monotone"
+                                  dataKey="actual"
+                                  stroke="#8b5cf6"
+                                  fill="#8b5cf620"
+                                  strokeWidth={3}
+                                  name="Actual"
+                                />
+                                <Area
+                                  type="monotone"
+                                  dataKey="projected"
+                                  stroke="#10b981"
+                                  fill="#10b98120"
+                                  strokeWidth={2}
+                                  strokeDasharray="5 5"
+                                  name="Projected"
+                                />
+                              </AreaChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+
+                        {/* Goal Achievement Probability */}
+                        <div>
+                          <h4 className="font-medium text-gray-900 mb-3">Goal Achievement Probability</h4>
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span>HbA1c &lt; 7.0%</span>
+                                <span className="font-medium text-green-600">85%</span>
+                              </div>
+                              <Progress value={85} className="h-2" />
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span>Weight Loss 5%</span>
+                                <span className="font-medium text-blue-600">72%</span>
+                              </div>
+                              <Progress value={72} className="h-2" />
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span>Blood Pressure &lt;130/80</span>
+                                <span className="font-medium text-yellow-600">68%</span>
+                              </div>
+                              <Progress value={68} className="h-2" />
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span>Cholesterol &lt;100 mg/dL</span>
+                                <span className="font-medium text-orange-600">45%</span>
+                              </div>
+                              <Progress value={45} className="h-2" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Treatment Recommendations with Impact Analysis */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center">
+                        <User className="w-5 h-5 mr-2 text-health-primary" />
+                        Personalized Treatment Recommendations
+                      </CardTitle>
+                      <CardDescription>
+                        Evidence-based recommendations with predicted impact
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <div>
-                              <p className="font-medium text-green-900">
-                                Cardiovascular Risk
-                              </p>
-                              <p className="text-sm text-green-700">Low (8%)</p>
+                        <div className="flex items-start space-x-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            1
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-gray-900 mb-1">Continue Current Medication Regimen</h4>
+                            <p className="text-sm text-gray-600 mb-2">
+                              Current diabetes medications are effective. Maintain current dosing.
+                            </p>
+                            <div className="flex items-center space-x-4 text-xs">
+                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded">Impact: High</span>
+                              <span className="text-gray-500">Evidence Level: A</span>
+                              <span className="text-gray-500">Success Rate: 89%</span>
                             </div>
                           </div>
-                          <CheckCircle className="w-5 h-5 text-green-600" />
                         </div>
 
-                        <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                            <div>
-                              <p className="font-medium text-yellow-900">
-                                Diabetic Complications
-                              </p>
-                              <p className="text-sm text-yellow-700">
-                                Moderate (25%)
-                              </p>
+                        <div className="flex items-start space-x-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            2
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-gray-900 mb-1">Increase Physical Activity</h4>
+                            <p className="text-sm text-gray-600 mb-2">
+                              Add 15 minutes of walking daily to improve glucose control and cardiovascular health.
+                            </p>
+                            <div className="flex items-center space-x-4 text-xs">
+                              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">Impact: Medium</span>
+                              <span className="text-gray-500">Evidence Level: A</span>
+                              <span className="text-gray-500">Projected HbA1c ↓ 0.3%</span>
                             </div>
                           </div>
-                          <AlertTriangle className="w-5 h-5 text-yellow-600" />
                         </div>
 
-                        <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                            <div>
-                              <p className="font-medium text-blue-900">
-                                Medication Interactions
-                              </p>
-                              <p className="text-sm text-blue-700">
-                                None detected
-                              </p>
+                        <div className="flex items-start space-x-4 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            3
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-gray-900 mb-1">Enhanced Glucose Monitoring</h4>
+                            <p className="text-sm text-gray-600 mb-2">
+                              Increase testing frequency to 3x daily during meal optimization phase.
+                            </p>
+                            <div className="flex items-center space-x-4 text-xs">
+                              <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded">Impact: Medium</span>
+                              <span className="text-gray-500">Evidence Level: B</span>
+                              <span className="text-gray-500">Duration: 4 weeks</span>
                             </div>
-                          </div>
-                          <CheckCircle className="w-5 h-5 text-blue-600" />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Treatment Recommendations</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                          <div className="w-2 h-2 bg-health-primary rounded-full mt-2"></div>
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              Continue Current Medication Regimen
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              Current diabetes medications are effective.
-                              Maintain current dosing.
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                          <div className="w-2 h-2 bg-health-primary rounded-full mt-2"></div>
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              Increase Physical Activity
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              Add 15 minutes of walking daily to improve glucose
-                              control and cardiovascular health.
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                          <div className="w-2 h-2 bg-health-primary rounded-full mt-2"></div>
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              Regular Monitoring
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              Continue quarterly HbA1c testing and annual
-                              comprehensive eye exams.
-                            </p>
                           </div>
                         </div>
                       </div>
